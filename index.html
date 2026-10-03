@@ -122,23 +122,27 @@
 
             const butterfly = { x: window.innerWidth * 0.5, y: window.innerHeight * 0.65 };
 
-            // Dynamic Cats Objects with Running and Jumping Physics
+            // Distinct Cat Profiles with Independent Speed and Jump Offsets
             const catBlack = {
-                x: window.innerWidth * 0.5 - 120,
+                x: window.innerWidth * 0.5 - 150,
                 y: window.innerHeight * 0.76,
-                targetX: window.innerWidth * 0.5 - 120,
                 color: '#1e272e',
                 eyeColor: '#ffdd59',
-                facing: 1 // 1 for right, -1 for left
+                facing: 1,
+                speed: 0.025,
+                offsetX: -50,
+                jumpFrequency: 2.2
             };
 
             const catGolden = {
-                x: window.innerWidth * 0.5 + 120,
+                x: window.innerWidth * 0.5 + 150,
                 y: window.innerHeight * 0.76,
-                targetX: window.innerWidth * 0.5 + 120,
                 color: '#d35400',
                 eyeColor: '#2ecc71',
-                facing: -1
+                facing: -1,
+                speed: 0.04,
+                offsetX: 50,
+                jumpFrequency: 1.7
             };
 
             function drawCloud(c) {
@@ -155,7 +159,8 @@
             function drawButterfly(x, y, time) {
                 ctx.save();
                 ctx.translate(x, y);
-                const wing = Math.sin(time * 18) * 9 + 2;
+                // Slow and smooth wing flapping
+                const wing = Math.sin(time * 10) * 8 + 3;
 
                 ctx.fillStyle = '#ff4757';
                 ctx.beginPath();
@@ -213,26 +218,37 @@
                 ctx.restore();
             }
 
-            // Universal Dynamic Cat Drawer (Running, Jumping & Eye Tracking)
-            function drawDynamicCat(cat, time, targetX, targetY) {
+            // Natural Cat Movement: Run along ground, Jump once near butterfly
+            function drawNaturalCat(cat, time, targetX, targetY) {
                 ctx.save();
 
-                // Smooth Horizontal Chase Movement
-                cat.targetX = targetX + (cat.facing * -40);
-                cat.x += (cat.targetX - cat.x) * 0.035;
-                if (targetX > cat.x + 10) cat.facing = 1;
-                else if (targetX < cat.x - 10) cat.facing = -1;
+                // Target position with individual offset to prevent overlapping
+                const targetCatX = targetX + cat.offsetX;
+                cat.x += (targetCatX - cat.x) * cat.speed;
 
-                // Running & Jumping Physics
-                const isMoving = Math.abs(cat.targetX - cat.x) > 5;
-                const runBob = isMoving ? Math.abs(Math.sin(time * 12)) * 6 : 0;
+                // Facing direction
+                if (targetX > cat.x + 5) cat.facing = 1;
+                else if (targetX < cat.x - 5) cat.facing = -1;
+
+                // Running along ground
+                const isRunning = Math.abs(targetCatX - cat.x) > 3;
+                const runBob = isRunning ? Math.abs(Math.sin(time * 8)) * 4 : 0;
+
+                // Subtle, gentle jump only when close to butterfly
                 const distToButterfly = Math.hypot(targetX - cat.x, targetY - cat.y);
-                const jumpOffset = (distToButterfly < 120 && Math.sin(time * 4) > 0) ? Math.sin(time * 4) * 32 : 0;
+                let jumpHeight = 0;
+                
+                if (distToButterfly < 100) {
+                    const jumpCycle = Math.sin(time * cat.jumpFrequency);
+                    if (jumpCycle > 0.6) {
+                        jumpHeight = (jumpCycle - 0.6) * 35; // Gentle normal height jump
+                    }
+                }
 
-                const posY = cat.y - jumpOffset - runBob;
+                const posY = cat.y - jumpHeight - runBob;
 
                 ctx.translate(cat.x, posY);
-                ctx.scale(cat.facing, 1); // Flip horizontally depending on facing direction
+                ctx.scale(cat.facing, 1);
 
                 // Body
                 ctx.fillStyle = cat.color;
@@ -240,14 +256,14 @@
                 ctx.ellipse(0, 0, 18, 14, 0, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Reaching Paw
-                const pawY = (jumpOffset > 5) ? -12 - Math.sin(time * 8) * 8 : -2 + Math.sin(time * 10) * 4;
+                // Reaching Paw (Raises paw gracefully when jumping)
+                const pawY = (jumpHeight > 5) ? -10 : -2 + Math.sin(time * 6) * 3;
                 ctx.strokeStyle = cat.color;
                 ctx.lineWidth = 4.5;
                 ctx.lineCap = 'round';
                 ctx.beginPath();
                 ctx.moveTo(8, -2);
-                ctx.lineTo(22, pawY);
+                ctx.lineTo(20, pawY);
                 ctx.stroke();
 
                 // Head
@@ -261,7 +277,7 @@
                 ctx.moveTo(11, -22); ctx.lineTo(16, -28); ctx.lineTo(19, -18);
                 ctx.fill();
 
-                // Dynamic Eye Tracking
+                // Eye Tracking
                 const headRealX = cat.x + (10 * cat.facing);
                 const angle = Math.atan2(targetY - (posY - 14), targetX - headRealX);
                 const ex = Math.cos(angle) * 2.2 * cat.facing;
@@ -338,18 +354,18 @@
                     ctx.restore();
                 });
 
-                // Butterfly Flying Pattern across the screen
+                // Slow and Gentle Butterfly Flight
                 const centerX = canvas.width * 0.5;
-                butterfly.x = centerX + Math.sin(time * 1.5) * (canvas.width * 0.28);
-                butterfly.y = canvas.height * 0.63 + Math.cos(time * 3) * 35;
+                butterfly.x = centerX + Math.sin(time * 0.8) * (canvas.width * 0.25);
+                butterfly.y = canvas.height * 0.65 + Math.cos(time * 1.5) * 20;
                 drawButterfly(butterfly.x, butterfly.y, time);
 
-                // Draw both Cats chasing, running and jumping after the butterfly
+                // Both cats running and playfully jumping independently
                 catBlack.y = canvas.height * 0.76;
                 catGolden.y = canvas.height * 0.76;
 
-                drawDynamicCat(catBlack, time, butterfly.x, butterfly.y);
-                drawDynamicCat(catGolden, time, butterfly.x, butterfly.y);
+                drawNaturalCat(catBlack, time, butterfly.x, butterfly.y);
+                drawNaturalCat(catGolden, time, butterfly.x, butterfly.y);
 
                 requestAnimationFrame(animate);
             }
@@ -411,5 +427,4 @@
         });
     </script>
 </body>
-    </html>
-    
+</html>

@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Open Phyy Letter</title>
-    <!-- Canvas Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         * {
@@ -24,7 +23,6 @@
             background: #eef2f5;
         }
 
-        /* ----- Canvas Engine ----- */
         #art-canvas {
             position: fixed;
             top: 0;
@@ -34,7 +32,6 @@
             z-index: 1;
         }
 
-        /* ----- Step 1: Open Button ----- */
         #step-1 {
             text-align: center;
             z-index: 10;
@@ -58,7 +55,6 @@
             box-shadow: 0 20px 40px rgba(255, 71, 87, 0.45);
         }
 
-        /* ----- Step 2: Loading Bar ----- */
         #step-2 {
             display: none;
             flex-direction: column;
@@ -90,7 +86,6 @@
             transition: width 0.05s linear;
         }
 
-        /* ----- Step 3: Main Interface ----- */
         #step-3 {
             display: none;
             width: 90%;
@@ -128,7 +123,9 @@
             text-align: left;
         }
 
-        .action-area { text-align: center; }
+        .action-area {
+            text-align: center;
+        }
 
         .zalo-btn {
             background: linear-gradient(135deg, #1e90ff, #0066cc);
@@ -150,20 +147,6 @@
             box-shadow: 0 15px 30px rgba(30, 144, 255, 0.4);
         }
 
-        .svg-petal {
-            position: fixed;
-            z-index: 5;
-            pointer-events: none;
-            animation: verticalRain linear forwards;
-        }
-
-        @keyframes verticalRain {
-            0% { opacity: 0; transform: translateY(0) rotate(0deg); }
-            15% { opacity: 0.95; }
-            85% { opacity: 0.95; }
-            100% { opacity: 0; transform: translateY(115vh) rotate(360deg); }
-        }
-
         @keyframes heartPulse {
             from { transform: scale(1); }
             to { transform: scale(1.18); }
@@ -172,15 +155,12 @@
 </head>
 <body>
 
-    <!-- Canvas Background Engine -->
     <canvas id="art-canvas"></canvas>
 
-    <!-- Step 1 -->
     <div id="step-1">
         <button class="letter-btn" id="open-btn">Open Phyy Letter 💌</button>
     </div>
 
-    <!-- Step 2 -->
     <div id="step-2">
         <div class="heart-icon">♥</div>
         <div class="progress-bar-container">
@@ -189,7 +169,6 @@
         <div style="font-size: 15px; color: #2f3542; font-weight: 700; margin-top: 5px;">Opening your private letter...</div>
     </div>
 
-    <!-- Step 3 -->
     <div id="step-3">
         <div class="clean-card">
             <div class="card-header">A NEW CHAPTER 🇻🇳 ❤️</div>
@@ -216,11 +195,9 @@
             }
 
             function initEnvironment() {
-                // Initialize High-Density Grass
                 grassBlades = [];
                 const grassCount = Math.floor(canvas.width * 2.2);
                 const startY = canvas.height * 0.62;
-
                 const grassColors = ['#2ed573', '#26af5f', '#10ac84', '#7bed9f', '#05c46b'];
 
                 for (let i = 0; i < grassCount; i++) {
@@ -235,7 +212,6 @@
                     });
                 }
 
-                // Initialize Flowers
                 flowers = [];
                 const flowerCount = Math.floor(canvas.width * 0.12);
                 for (let i = 0; i < flowerCount; i++) {
@@ -247,7 +223,6 @@
                     });
                 }
 
-                // Initialize Clouds
                 clouds = [
                     { x: canvas.width * 0.15, y: canvas.height * 0.18, scale: 0.9, speed: 0.15 },
                     { x: canvas.width * 0.55, y: canvas.height * 0.12, scale: 1.2, speed: 0.2 },
@@ -258,7 +233,6 @@
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
 
-            // Butterfly Physics
             const butterfly = {
                 x: window.innerWidth * 0.5,
                 y: window.innerHeight * 0.68,
@@ -267,7 +241,6 @@
                 angle: 0
             };
 
-            // Detailed Black Cat
             const catBlack = {
                 x: window.innerWidth * 0.3,
                 y: window.innerHeight * 0.78,
@@ -275,7 +248,6 @@
                 eyeColor: '#ffdd59'
             };
 
-            // Detailed Golden Tabby Cat
             const catGolden = {
                 x: window.innerWidth * 0.42,
                 y: window.innerHeight * 0.81,
@@ -284,7 +256,6 @@
                 eyeColor: '#4cd137'
             };
 
-            // Render Volumetric Cloud
             function drawCloud(cx, cy, scale) {
                 ctx.save();
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
@@ -295,7 +266,6 @@
                 ctx.arc(cx + 10 * scale, cy - 15 * scale, 26 * scale, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Subtle Shadow
                 ctx.fillStyle = 'rgba(220, 230, 242, 0.4)';
                 ctx.beginPath();
                 ctx.arc(cx, cy + 12 * scale, 30 * scale, 0, Math.PI);
@@ -303,12 +273,10 @@
                 ctx.restore();
             }
 
-            // Draw Ultra-Detailed Black Cat
             function drawBlackCat(c, time) {
                 ctx.save();
                 ctx.translate(c.x, c.y + Math.sin(time * 3) * 2);
 
-                // Tail Wave
                 ctx.strokeStyle = c.color;
                 ctx.lineWidth = 6;
                 ctx.lineCap = 'round';
@@ -317,18 +285,15 @@
                 ctx.quadraticCurveTo(-30, -20 + Math.sin(time * 4) * 10, -22, -34);
                 ctx.stroke();
 
-                // Body & Fur
                 ctx.fillStyle = c.color;
                 ctx.beginPath();
                 ctx.ellipse(0, 0, 19, 14, 0, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Head
                 ctx.beginPath();
                 ctx.arc(14, -14, 12, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Ears with Pink Inner
                 ctx.beginPath();
                 ctx.moveTo(6, -20); ctx.lineTo(10, -30); ctx.lineTo(16, -22);
                 ctx.moveTo(15, -22); ctx.lineTo(20, -30); ctx.lineTo(24, -18);
@@ -339,7 +304,6 @@
                 ctx.moveTo(8, -21); ctx.lineTo(10, -27); ctx.lineTo(14, -22);
                 ctx.fill();
 
-                // Bright Golden Eyes & Pupil
                 ctx.fillStyle = c.eyeColor;
                 ctx.beginPath();
                 ctx.ellipse(19, -15, 3.5, 4.5, 0, 0, Math.PI * 2);
@@ -350,7 +314,6 @@
                 ctx.ellipse(19.5, -15, 1.2, 3.2, 0, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Whiskers
                 ctx.strokeStyle = '#ffffff';
                 ctx.lineWidth = 0.8;
                 ctx.beginPath();
@@ -361,12 +324,10 @@
                 ctx.restore();
             }
 
-            // Draw Ultra-Detailed Golden-Brown Cat
             function drawGoldenCat(c, time) {
                 ctx.save();
                 ctx.translate(c.x, c.y + Math.cos(time * 3) * 2);
 
-                // Tail
                 ctx.strokeStyle = c.color;
                 ctx.lineWidth = 6;
                 ctx.lineCap = 'round';
@@ -375,20 +336,17 @@
                 ctx.quadraticCurveTo(-28, -18 + Math.cos(time * 4) * 10, -20, -32);
                 ctx.stroke();
 
-                // Body
                 ctx.fillStyle = c.color;
                 ctx.beginPath();
                 ctx.ellipse(0, 0, 20, 15, 0, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Tabby Stripes Pattern
                 ctx.fillStyle = c.stripeColor;
                 ctx.beginPath();
                 ctx.ellipse(-4, -4, 5, 10, 0.3, 0, Math.PI * 2);
                 ctx.ellipse(4, -2, 4, 9, 0.1, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Head & Muzzle
                 ctx.fillStyle = c.color;
                 ctx.beginPath();
                 ctx.arc(14, -14, 12.5, 0, Math.PI * 2);
@@ -399,14 +357,12 @@
                 ctx.arc(19, -11, 4.5, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Ears
                 ctx.fillStyle = c.color;
                 ctx.beginPath();
                 ctx.moveTo(7, -20); ctx.lineTo(11, -31); ctx.lineTo(17, -22);
                 ctx.moveTo(16, -22); ctx.lineTo(21, -31); ctx.lineTo(25, -18);
                 ctx.fill();
 
-                // Emerald Green Eyes
                 ctx.fillStyle = c.eyeColor;
                 ctx.beginPath();
                 ctx.ellipse(19, -16, 3.5, 4.5, 0, 0, Math.PI * 2);
@@ -417,7 +373,6 @@
                 ctx.ellipse(19.5, -16, 1.2, 3.2, 0, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Cute Pink Nose & Whiskers
                 ctx.fillStyle = '#ff7675';
                 ctx.beginPath();
                 ctx.arc(22.5, -13, 1.5, 0, Math.PI * 2);
@@ -433,12 +388,10 @@
                 ctx.restore();
             }
 
-            // Main Graphics Rendering Loop
             function renderMasterpiece() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 const time = Date.now() * 0.002;
 
-                // 1. Vibrant Sunny Sky Gradient
                 const skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.65);
                 skyGrad.addColorStop(0, '#0984e3');
                 skyGrad.addColorStop(0.4, '#74b9ff');
@@ -447,10 +400,8 @@
                 ctx.fillStyle = skyGrad;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Bright Daytime Sun & Sunbeams
                 const sunX = canvas.width * 0.78;
                 const sunY = canvas.height * 0.16;
-
                 const sunGlow = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 200);
                 sunGlow.addColorStop(0, 'rgba(255, 255, 230, 0.95)');
                 sunGlow.addColorStop(0.3, 'rgba(255, 234, 167, 0.5)');
@@ -458,14 +409,12 @@
                 ctx.fillStyle = sunGlow;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // 2. Render Clouds with Drift
                 clouds.forEach(c => {
                     c.x += c.speed;
                     if (c.x - 100 > canvas.width) c.x = -100;
                     drawCloud(c.x, c.y, c.scale);
                 });
 
-                // 3. Lush Green Meadow Ground
                 const groundY = canvas.height * 0.62;
                 const groundGrad = ctx.createLinearGradient(0, groundY, 0, canvas.height);
                 groundGrad.addColorStop(0, '#2ed573');
@@ -474,7 +423,6 @@
                 ctx.fillStyle = groundGrad;
                 ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
 
-                // 4. Render Micro Grass Blades
                 for (let i = 0; i < grassBlades.length; i++) {
                     const b = grassBlades[i];
                     const sway = Math.sin(time * 2.5 + b.windOffset) * 5;
@@ -486,7 +434,6 @@
                     ctx.stroke();
                 }
 
-                // 5. Render Wildflowers
                 flowers.forEach(f => {
                     ctx.fillStyle = f.type === 'daisy' ? '#ffffff' : '#ff7675';
                     ctx.beginPath();
@@ -499,7 +446,6 @@
                     ctx.fill();
                 });
 
-                // 6. Flying Butterfly Physics
                 butterfly.angle += 0.12;
                 if (Math.random() < 0.02) {
                     butterfly.targetX = Math.random() * (canvas.width * 0.6) + canvas.width * 0.2;
@@ -508,7 +454,6 @@
                 butterfly.x += (butterfly.targetX - butterfly.x) * 0.03;
                 butterfly.y += (butterfly.targetY - butterfly.y) * 0.03 + Math.sin(butterfly.angle) * 2.5;
 
-                // Butterfly Dual Wings Animation
                 ctx.fillStyle = '#ff4757';
                 const wingSplay = Math.abs(Math.sin(butterfly.angle * 2)) * 8 + 3;
                 ctx.beginPath();
@@ -516,7 +461,6 @@
                 ctx.ellipse(butterfly.x + 4, butterfly.y, wingSplay, 6, -0.2, 0, Math.PI * 2);
                 ctx.fill();
 
-                // 7. Dynamic Cats Movement
                 catBlack.x += (butterfly.x - 50 - catBlack.x) * 0.025;
                 catGolden.x += (butterfly.x + 35 - catGolden.x) * 0.025;
 
@@ -528,7 +472,6 @@
 
             renderMasterpiece();
 
-            /* Button Event Handlers */
             document.getElementById('open-btn').addEventListener('click', () => {
                 if (typeof confetti === 'function') {
                     confetti({ particleCount: 90, spread: 100, origin: { y: 0.6 } });
@@ -552,8 +495,8 @@
             });
 
             function typeWriterMessage() {
-                const text = "I have shut down my main accounts and cut out every unnecessary distraction.\n\nYour dedication, loyalty, and actions showeds 
-                    let index = 0;
+                const text = "I have shut down my main accounts and cut out every unnecessary distraction.\n\nYour dedication, loyalty, and actions showed me what really matters. My energy and focus belong completely to our future now.\n\nNo distractions. Just us.";
+                let index = 0;
                 const target = document.getElementById('typed-text');
                 target.innerHTML = "";
 
@@ -569,4 +512,5 @@
         });
     </script>
 </body>
-</html>
+    </html>
+    

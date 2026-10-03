@@ -102,7 +102,7 @@
         .progress-bar-container {
             width: 260px;
             height: 16px;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 10px;
             overflow: hidden;
             border: 1px solid #ff80ab;
@@ -234,7 +234,7 @@
 </head>
 <body>
 
-    <!-- Anime Canvas Background -->
+    <!-- Anime Canvas Background with Playful Cat -->
     <canvas id="anime-bg"></canvas>
 
     <!-- Screen Outer Edge Single Glow -->
@@ -270,7 +270,7 @@
     </div>
 
     <script>
-        /* ----- Pure Code Anime Grassland & Sky Animation ----- */
+        /* ----- Pure Code Anime Grassland & Playful Cat Animation ----- */
         const canvas = document.getElementById('anime-bg');
         const ctx = canvas.getContext('2d');
 
@@ -282,13 +282,33 @@
         window.addEventListener('resize', resizeCanvas);
 
         // Floating Dandelion Particles
-        const particles = Array.from({ length: 40 }, () => ({
+        const particles = Array.from({ length: 30 }, () => ({
             x: Math.random() * window.innerWidth,
             y: Math.random() * window.innerHeight,
             r: Math.random() * 3 + 1,
-            dx: Math.random() * 1 + 0.5,
-            dy: Math.random() * -0.8 - 0.2
+            dx: Math.random() * 1 + 0.3,
+            dy: Math.random() * -0.6 - 0.2
         }));
+
+        // Butterfly State
+        const butterfly = {
+            x: window.innerWidth * 0.3,
+            y: window.innerHeight * 0.72,
+            targetX: window.innerWidth * 0.3,
+            targetY: window.innerHeight * 0.72,
+            angle: 0
+        };
+
+        // Cat State
+        const cat = {
+            x: window.innerWidth * 0.2,
+            y: window.innerHeight * 0.78,
+            targetX: window.innerWidth * 0.2,
+            tailAngle: 0,
+            earAngle: 0,
+            isJumping: false,
+            jumpHeight: 0
+        };
 
         function drawAnimeBackground() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -301,7 +321,15 @@
             ctx.fillStyle = skyGradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // 2. Anime Grassland Waves (Green Horizon)
+            // 2. Anime Clouds
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+            ctx.beginPath();
+            ctx.arc(canvas.width * 0.2, canvas.height * 0.25, 50, 0, Math.PI * 2);
+            ctx.arc(canvas.width * 0.25, canvas.height * 0.22, 65, 0, Math.PI * 2);
+            ctx.arc(canvas.width * 0.3, canvas.height * 0.25, 50, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 3. Anime Grassland Waves
             const time = Date.now() * 0.002;
             
             // Back Hill
@@ -309,7 +337,7 @@
             ctx.beginPath();
             ctx.moveTo(0, canvas.height);
             for (let x = 0; x <= canvas.width; x += 10) {
-                ctx.lineTo(x, canvas.height * 0.68 + Math.sin(x * 0.005 + time) * 15);
+                ctx.lineTo(x, canvas.height * 0.68 + Math.sin(x * 0.005 + time) * 12);
             }
             ctx.lineTo(canvas.width, canvas.height);
             ctx.fill();
@@ -319,13 +347,109 @@
             ctx.beginPath();
             ctx.moveTo(0, canvas.height);
             for (let x = 0; x <= canvas.width; x += 10) {
-                ctx.lineTo(x, canvas.height * 0.78 + Math.cos(x * 0.008 + time * 1.2) * 20);
+                ctx.lineTo(x, canvas.height * 0.76 + Math.cos(x * 0.008 + time * 1.2) * 15);
             }
             ctx.lineTo(canvas.width, canvas.height);
             ctx.fill();
 
-            // 3. Floating Light Particles
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            // 4. Update & Draw Butterfly
+            butterfly.angle += 0.1;
+            if (Math.random() < 0.02) {
+                butterfly.targetX = Math.random() * (canvas.width * 0.7) + canvas.width * 0.15;
+                butterfly.targetY = canvas.height * 0.65 + Math.random() * 60;
+            }
+            butterfly.x += (butterfly.targetX - butterfly.x) * 0.03;
+            butterfly.y += (butterfly.targetY - butterfly.y) * 0.03 + Math.sin(butterfly.angle) * 1.5;
+
+            // Draw Butterfly
+            ctx.fillStyle = '#ff4081';
+            const wingSize = Math.abs(Math.sin(butterfly.angle * 2)) * 8 + 4;
+            ctx.beginPath();
+            ctx.ellipse(butterfly.x - 4, butterfly.y, wingSize, 6, 0.3, 0, Math.PI * 2);
+            ctx.ellipse(butterfly.x + 4, butterfly.y, wingSize, 6, -0.3, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 5. Update & Draw Playful Anime Cat
+            cat.targetX = butterfly.x - 35;
+            cat.x += (cat.targetX - cat.x) * 0.04;
+            cat.y = canvas.height * 0.77 + Math.sin(time * 3) * 3;
+
+            // Jump Action when close to butterfly
+            if (Math.abs(cat.x - (butterfly.x - 35)) < 15 && !cat.isJumping && Math.random() < 0.05) {
+                cat.isJumping = true;
+                cat.jumpHeight = 22;
+            }
+            if (cat.isJumping) {
+                cat.jumpHeight -= 1.2;
+                if (cat.jumpHeight <= 0) {
+                    cat.jumpHeight = 0;
+                    cat.isJumping = false;
+                }
+            }
+
+            const renderCatY = cat.y - cat.jumpHeight;
+
+            // Draw Cat Body (White/Orange Cute Anime Style)
+            ctx.save();
+            ctx.translate(cat.x, renderCatY);
+
+            // Tail
+            ctx.strokeStyle = '#ffa726';
+            ctx.lineWidth = 6;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(-15, -5);
+            ctx.quadraticCurveTo(-30, -25 + Math.sin(time * 4) * 10, -20, -35);
+            ctx.stroke();
+
+            // Body
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 18, 14, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Orange Patches
+            ctx.fillStyle = '#ffa726';
+            ctx.beginPath();
+            ctx.ellipse(-4, -4, 10, 8, 0.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Head
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(14, -12, 12, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Ears
+            ctx.fillStyle = '#ffa726';
+            // Left Ear
+            ctx.beginPath();
+            ctx.moveTo(6, -20);
+            ctx.lineTo(11, -29 + Math.sin(time * 5) * 2);
+            ctx.lineTo(15, -22);
+            ctx.fill();
+            // Right Ear
+            ctx.beginPath();
+            ctx.moveTo(14, -22);
+            ctx.lineTo(19, -29 + Math.sin(time * 5 + 1) * 2);
+            ctx.lineTo(22, -18);
+            ctx.fill();
+
+            // Eyes & Blush
+            ctx.fillStyle = '#263238';
+            ctx.beginPath();
+            ctx.arc(20, -13, 2, 0, Math.PI * 2); // Eye
+            ctx.fill();
+
+            ctx.fillStyle = '#ff80ab';
+            ctx.beginPath();
+            ctx.arc(18, -9, 3, 0, Math.PI * 2); // Blush
+            ctx.fill();
+
+            ctx.restore();
+
+            // 6. Floating Light Particles
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
             particles.forEach(p => {
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -346,7 +470,7 @@
         document.getElementById('open-btn').addEventListener('click', function(e) {
             // First Code Red Paper Confetti Explosion
             confetti({
-                particleCount: 80,
+                particleCount: 85,
                 spread: 100,
                 origin: { y: 0.6 },
                 colors: ['#da251d', '#ff1744', '#ffc107', '#ff4081']

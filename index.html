@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open Phyy Letter</title>
+    <title>Open Phyy's Letter</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -17,9 +17,13 @@
         .progress-bar-container { width: 280px; height: 16px; background: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; }
         .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #ff4757, #ff7f50); border-radius: 12px; transition: width 0.05s linear; }
         #step-3 { display: none; width: 90%; max-width: 600px; z-index: 10; }
-        .clean-card { background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(20px); padding: 42px 36px; border-radius: 28px; border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12); text-align: center; }
-        .card-header { color: #2f3542; font-size: 26px; font-weight: 800; margin-bottom: 20px; letter-spacing: 1px; }
-        .message-content { font-size: 15px; line-height: 1.8; color: #57606f; white-space: pre-line; font-weight: 600; text-align: left; }
+        .clean-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); padding: 35px 30px; border-radius: 28px; border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12); text-align: center; max-height: 85vh; display: flex; flex-direction: column; }
+        .card-header { color: #2f3542; font-size: 26px; font-weight: 800; margin-bottom: 15px; letter-spacing: 1px; flex-shrink: 0; }
+        .scroll-container { overflow-y: auto; padding-right: 10px; max-height: 50vh; text-align: left; }
+        .scroll-container::-webkit-scrollbar { width: 6px; }
+        .scroll-container::-webkit-scrollbar-thumb { background: #ff6b81; border-radius: 10px; }
+        .message-content { font-size: 15px; line-height: 1.8; color: #57606f; white-space: pre-line; font-weight: 600; }
+        .signature { margin-top: 25px; text-align: right; font-size: 20px; font-weight: 800; color: #ff4757; font-style: italic; letter-spacing: 1.5px; border-top: 1px border #e0e0e0; padding-top: 10px; }
         @keyframes heartPulse { from { transform: scale(1); } to { transform: scale(1.18); } }
     </style>
 </head>
@@ -28,7 +32,7 @@
     <canvas id="art-canvas"></canvas>
 
     <div id="step-1">
-        <button class="letter-btn" id="open-btn">Open Phyy Letter 💌</button>
+        <button class="letter-btn" id="open-btn">Open Phyy's Letter 💌</button>
     </div>
 
     <div id="step-2">
@@ -40,7 +44,10 @@
     <div id="step-3">
         <div class="clean-card">
             <div class="card-header">Thê 🇻🇳 ❤️</div>
-            <div class="message-content" id="typed-text"></div>
+            <div class="scroll-container" id="scroll-box">
+                <div class="message-content" id="typed-text"></div>
+                <div class="signature">~ PHM.phyo ~</div>
+            </div>
         </div>
     </div>
 
@@ -103,8 +110,8 @@
                 angle: 0
             };
 
-            const catBlack = { x: window.innerWidth * 0.5 - 60, y: window.innerHeight * 0.78, color: '#1e272e', eyeColor: '#ffdd59' };
-            const catGolden = { x: window.innerWidth * 0.5 + 60, y: window.innerHeight * 0.78, color: '#e1b12c', stripeColor: '#b37700', eyeColor: '#4cd137' };
+            const catBlack = { x: window.innerWidth * 0.5 - 75, y: window.innerHeight * 0.78, color: '#1e272e', eyeColor: '#ffdd59' };
+            const catGolden = { x: window.innerWidth * 0.5 + 75, y: window.innerHeight * 0.78, color: '#e1b12c', stripeColor: '#b37700', eyeColor: '#4cd137' };
 
             function drawCloud(cx, cy, scale) {
                 ctx.save();
@@ -123,11 +130,9 @@
                 ctx.translate(b.x, b.y);
                 const wingSway = Math.sin(time * 15) * 0.7 + 0.3;
 
-                // Glowing Effect
                 ctx.shadowColor = 'rgba(255, 107, 129, 0.8)';
                 ctx.shadowBlur = 10;
 
-                // Left Wing
                 ctx.fillStyle = '#ff4757';
                 ctx.beginPath();
                 ctx.ellipse(-8 * wingSway, -4, 10 * wingSway, 7, -0.2, 0, Math.PI * 2);
@@ -137,7 +142,6 @@
                 ctx.ellipse(-6 * wingSway, -3, 5 * wingSway, 3, -0.2, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Right Wing
                 ctx.fillStyle = '#ff4757';
                 ctx.beginPath();
                 ctx.ellipse(8 * wingSway, -4, 10 * wingSway, 7, 0.2, 0, Math.PI * 2);
@@ -147,14 +151,12 @@
                 ctx.ellipse(6 * wingSway, -3, 5 * wingSway, 3, 0.2, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Body
                 ctx.shadowBlur = 0;
                 ctx.fillStyle = '#2f3542';
                 ctx.beginPath();
                 ctx.ellipse(0, 0, 2, 7, 0, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Antennae
                 ctx.strokeStyle = '#2f3542';
                 ctx.lineWidth = 1;
                 ctx.beginPath();
@@ -165,18 +167,17 @@
                 ctx.restore();
             }
 
-            function drawFacingBlackCat(c, time, isFacingRight) {
+            function drawFacingBlackCat(c, time) {
                 ctx.save();
                 ctx.translate(c.x, c.y + Math.sin(time * 3) * 2);
-                const dir = isFacingRight ? 1 : -1;
 
-                // Tail Wave
+                // Tail
                 ctx.strokeStyle = c.color;
                 ctx.lineWidth = 6;
                 ctx.lineCap = 'round';
                 ctx.beginPath();
-                ctx.moveTo(-12 * dir, -2);
-                ctx.quadraticCurveTo(-26 * dir, -20 + Math.sin(time * 4) * 10, -18 * dir, -34);
+                ctx.moveTo(-12, -2);
+                ctx.quadraticCurveTo(-26, -20 + Math.sin(time * 4) * 10, -18, -34);
                 ctx.stroke();
 
                 // Body
@@ -185,50 +186,49 @@
                 ctx.ellipse(0, 0, 19, 14, 0, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Head facing center
+                // Head facing center (Right)
                 ctx.beginPath();
-                ctx.arc(12 * dir, -14, 12, 0, Math.PI * 2);
+                ctx.arc(12, -14, 12, 0, Math.PI * 2);
                 ctx.fill();
 
                 // Ears
                 ctx.beginPath();
-                ctx.moveTo(4 * dir, -20); ctx.lineTo(8 * dir, -30); ctx.lineTo(14 * dir, -22);
-                ctx.moveTo(13 * dir, -22); ctx.lineTo(18 * dir, -30); ctx.lineTo(22 * dir, -18);
+                ctx.moveTo(4, -20); ctx.lineTo(8, -30); ctx.lineTo(14, -22);
+                ctx.moveTo(13, -22); ctx.lineTo(18, -30); ctx.lineTo(22, -18);
                 ctx.fill();
 
-                // Eyes focused upward on butterfly
+                // Eyes
                 ctx.fillStyle = c.eyeColor;
                 ctx.beginPath();
-                ctx.ellipse(16 * dir, -16, 3.5, 4.5, 0, 0, Math.PI * 2);
+                ctx.ellipse(16, -16, 3.5, 4.5, 0, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.fillStyle = '#000000';
                 ctx.beginPath();
-                ctx.ellipse(16.5 * dir, -17, 1.2, 3.2, 0, 0, Math.PI * 2);
+                ctx.ellipse(16.5, -17, 1.2, 3.2, 0, 0, Math.PI * 2);
                 ctx.fill();
 
                 // Whiskers
                 ctx.strokeStyle = '#ffffff';
                 ctx.lineWidth = 0.8;
                 ctx.beginPath();
-                ctx.moveTo(20 * dir, -12); ctx.lineTo(30 * dir, -14);
-                ctx.moveTo(20 * dir, -10); ctx.lineTo(29 * dir, -8);
+                ctx.moveTo(20, -12); ctx.lineTo(30, -14);
+                ctx.moveTo(20, -10); ctx.lineTo(29, -8);
                 ctx.stroke();
 
                 ctx.restore();
             }
 
-            function drawFacingGoldenCat(c, time, isFacingRight) {
+            function drawFacingGoldenCat(c, time) {
                 ctx.save();
                 ctx.translate(c.x, c.y + Math.cos(time * 3) * 2);
-                const dir = isFacingRight ? 1 : -1;
 
                 // Tail
                 ctx.strokeStyle = c.color;
                 ctx.lineWidth = 6;
                 ctx.lineCap = 'round';
                 ctx.beginPath();
-                ctx.moveTo(-12 * dir, -2);
-                ctx.quadraticCurveTo(-26 * dir, -18 + Math.cos(time * 4) * 10, -18 * dir, -32);
+                ctx.moveTo(12, -2);
+                ctx.quadraticCurveTo(26, -18 + Math.cos(time * 4) * 10, 18, -32);
                 ctx.stroke();
 
                 // Body
@@ -240,38 +240,38 @@
                 // Stripes
                 ctx.fillStyle = c.stripeColor;
                 ctx.beginPath();
-                ctx.ellipse(-4 * dir, -4, 5, 10, 0.3 * dir, 0, Math.PI * 2);
-                ctx.ellipse(4 * dir, -2, 4, 9, 0.1 * dir, 0, Math.PI * 2);
+                ctx.ellipse(4, -4, 5, 10, -0.3, 0, Math.PI * 2);
+                ctx.ellipse(-4, -2, 4, 9, -0.1, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Head facing center
+                // Head facing center (Left)
                 ctx.fillStyle = c.color;
                 ctx.beginPath();
-                ctx.arc(12 * dir, -14, 12.5, 0, Math.PI * 2);
+                ctx.arc(-12, -14, 12.5, 0, Math.PI * 2);
                 ctx.fill();
 
                 // Ears
                 ctx.beginPath();
-                ctx.moveTo(5 * dir, -20); ctx.lineTo(9 * dir, -31); ctx.lineTo(15 * dir, -22);
-                ctx.moveTo(14 * dir, -22); ctx.lineTo(19 * dir, -31); ctx.lineTo(23 * dir, -18);
+                ctx.moveTo(-5, -20); ctx.lineTo(-9, -31); ctx.lineTo(-15, -22);
+                ctx.moveTo(-14, -22); ctx.lineTo(-19, -31); ctx.lineTo(-23, -18);
                 ctx.fill();
 
-                // Eyes focused upward on butterfly
+                // Eyes
                 ctx.fillStyle = c.eyeColor;
                 ctx.beginPath();
-                ctx.ellipse(16 * dir, -17, 3.5, 4.5, 0, 0, Math.PI * 2);
+                ctx.ellipse(-16, -17, 3.5, 4.5, 0, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.fillStyle = '#000000';
                 ctx.beginPath();
-                ctx.ellipse(16.5 * dir, -18, 1.2, 3.2, 0, 0, Math.PI * 2);
+                ctx.ellipse(-16.5, -18, 1.2, 3.2, 0, 0, Math.PI * 2);
                 ctx.fill();
 
                 // Whiskers
                 ctx.strokeStyle = '#57606f';
                 ctx.lineWidth = 0.8;
                 ctx.beginPath();
-                ctx.moveTo(20 * dir, -11); ctx.lineTo(29 * dir, -13);
-                ctx.moveTo(20 * dir, -9); ctx.lineTo(28 * dir, -7);
+                ctx.moveTo(-20, -11); ctx.lineTo(-29, -13);
+                ctx.moveTo(-20, -9); ctx.lineTo(-28, -7);
                 ctx.stroke();
 
                 ctx.restore();
@@ -290,7 +290,7 @@
                 ctx.fillStyle = skyGrad;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Sun Glow
+                // Sun
                 const sunX = canvas.width * 0.78, sunY = canvas.height * 0.16;
                 const sunGlow = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 200);
                 sunGlow.addColorStop(0, 'rgba(255, 255, 230, 0.95)');
@@ -306,7 +306,7 @@
                     drawCloud(c.x, c.y, c.scale);
                 });
 
-                // Meadow Ground
+                // Ground
                 const groundY = canvas.height * 0.62;
                 const groundGrad = ctx.createLinearGradient(0, groundY, 0, canvas.height);
                 groundGrad.addColorStop(0, '#2ed573');
@@ -335,7 +335,7 @@
                     ctx.beginPath(); ctx.arc(f.x, f.y, f.size * 0.4, 0, Math.PI * 2); ctx.fill();
                 });
 
-                // Playful Butterfly Movement between Cats
+                // Butterfly Movement
                 butterfly.angle += 0.08;
                 const centerX = canvas.width * 0.5;
                 butterfly.targetX = centerX + Math.sin(butterfly.angle) * 70;
@@ -346,12 +346,12 @@
 
                 drawDetailedButterfly(butterfly, time);
 
-                // Cats Positioning Facing Each Other
+                // Cats Positioning
                 catBlack.x = centerX - 75;
                 catGolden.x = centerX + 75;
 
-                drawFacingBlackCat(catBlack, time, true);   // Left cat facing Right
-                drawFacingGoldenCat(catGolden, time, false); // Right cat facing Left
+                drawFacingBlackCat(catBlack, time);
+                drawFacingGoldenCat(catGolden, time);
 
                 requestAnimationFrame(renderMasterpiece);
             }
@@ -384,12 +384,14 @@
                 const text = "Thê, you are a truly talented and capable girl. I sincerely respect, admire, and love you.\n\nYou are immensely valuable to me—one of a kind, irreplaceable. You might think I am exaggerating, but having met many people, I can confidently say no one comes close to your qualities.\n\nWhen I was surrounded by betrayal and completely broken, you became my sole emotional supporter. Your hard work, dedication, and endurance inspired me and gave me strength.\n\nThat is why I will try my best to take even better care of you. To stay away from other girls, I have shut down my main account and switched to a private account shared only with you and my closest friends. My attention belongs solely to you.\n\nSo, let us work hard and build our future together.";
                 let index = 0;
                 const target = document.getElementById('typed-text');
+                const scrollBox = document.getElementById('scroll-box');
                 target.innerHTML = "";
 
                 function type() {
                     if (index < text.length) {
                         target.innerHTML += text.charAt(index) === '\n' ? '<br>' : text.charAt(index);
                         index++;
+                        scrollBox.scrollTop = scrollBox.scrollHeight;
                         setTimeout(type, 30);
                     }
                 }

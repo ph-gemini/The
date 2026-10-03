@@ -6,151 +6,21 @@
     <title>Open Phyy Letter</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
-            background: #eef2f5;
-        }
-
-        #art-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1;
-        }
-
-        #step-1 {
-            text-align: center;
-            z-index: 10;
-        }
-
-        .letter-btn {
-            background: linear-gradient(135deg, #ff4757, #ff6b81);
-            color: #ffffff;
-            border: none;
-            padding: 22px 50px;
-            font-size: 22px;
-            font-weight: 700;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 15px 35px rgba(255, 71, 87, 0.35);
-            transition: all 0.3s ease;
-        }
-
-        .letter-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 20px 40px rgba(255, 71, 87, 0.45);
-        }
-
-        #step-2 {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-            z-index: 10;
-        }
-
-        .heart-icon {
-            font-size: 52px;
-            color: #ff4757;
-            animation: heartPulse 0.8s infinite alternate ease-in-out;
-        }
-
-        .progress-bar-container {
-            width: 280px;
-            height: 16px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #ff4757, #ff7f50);
-            border-radius: 12px;
-            transition: width 0.05s linear;
-        }
-
-        #step-3 {
-            display: none;
-            width: 90%;
-            max-width: 600px;
-            z-index: 10;
-            position: relative;
-        }
-
-        .clean-card {
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(20px);
-            padding: 42px 36px;
-            border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
-            text-align: center;
-        }
-
-        .card-header {
-            color: #2f3542;
-            font-size: 26px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-        }
-
-        .message-content {
-            font-size: 16px;
-            line-height: 1.9;
-            color: #57606f;
-            white-space: pre-line;
-            margin-bottom: 30px;
-            min-height: 130px;
-            font-weight: 600;
-            text-align: left;
-        }
-
-        .action-area {
-            text-align: center;
-        }
-
-        .zalo-btn {
-            background: linear-gradient(135deg, #1e90ff, #0066cc);
-            color: #ffffff;
-            border: none;
-            padding: 15px 36px;
-            font-size: 17px;
-            font-weight: 700;
-            border-radius: 14px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 10px 25px rgba(30, 144, 255, 0.3);
-            transition: all 0.2s ease;
-        }
-
-        .zalo-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(30, 144, 255, 0.4);
-        }
-
-        @keyframes heartPulse {
-            from { transform: scale(1); }
-            to { transform: scale(1.18); }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; background: #eef2f5; }
+        #art-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
+        #step-1 { text-align: center; z-index: 10; }
+        .letter-btn { background: linear-gradient(135deg, #ff4757, #ff6b81); color: #fff; border: none; padding: 22px 50px; font-size: 22px; font-weight: 700; border-radius: 50px; cursor: pointer; box-shadow: 0 15px 35px rgba(255, 71, 87, 0.35); transition: all 0.3s; }
+        .letter-btn:hover { transform: translateY(-3px) scale(1.05); }
+        #step-2 { display: none; flex-direction: column; align-items: center; gap: 16px; z-index: 10; }
+        .heart-icon { font-size: 52px; color: #ff4757; animation: heartPulse 0.8s infinite alternate ease-in-out; }
+        .progress-bar-container { width: 280px; height: 16px; background: rgba(255, 255, 255, 0.9); border-radius: 12px; overflow: hidden; }
+        .progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #ff4757, #ff7f50); border-radius: 12px; transition: width 0.05s linear; }
+        #step-3 { display: none; width: 90%; max-width: 600px; z-index: 10; }
+        .clean-card { background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(20px); padding: 42px 36px; border-radius: 28px; border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12); text-align: center; }
+        .card-header { color: #2f3542; font-size: 26px; font-weight: 800; margin-bottom: 20px; letter-spacing: 1px; }
+        .message-content { font-size: 15px; line-height: 1.8; color: #57606f; white-space: pre-line; font-weight: 600; text-align: left; }
+        @keyframes heartPulse { from { transform: scale(1); } to { transform: scale(1.18); } }
     </style>
 </head>
 <body>
@@ -163,19 +33,14 @@
 
     <div id="step-2">
         <div class="heart-icon">♥</div>
-        <div class="progress-bar-container">
-            <div class="progress-bar" id="p-bar"></div>
-        </div>
+        <div class="progress-bar-container"><div class="progress-bar" id="p-bar"></div></div>
         <div style="font-size: 15px; color: #2f3542; font-weight: 700; margin-top: 5px;">Opening your private letter...</div>
     </div>
 
     <div id="step-3">
         <div class="clean-card">
-            <div class="card-header">A NEW CHAPTER 🇻🇳 ❤️</div>
+            <div class="card-header">Thê 🇻🇳 ❤️</div>
             <div class="message-content" id="typed-text"></div>
-            <div class="action-area">
-                <a href="https://zalo.me" class="zalo-btn" target="_blank">Connect on Zalo</a>
-            </div>
         </div>
     </div>
 
@@ -183,10 +48,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             const canvas = document.getElementById('art-canvas');
             const ctx = canvas.getContext('2d');
-
-            let grassBlades = [];
-            let flowers = [];
-            let clouds = [];
+            let grassBlades = [], flowers = [], clouds = [];
 
             function resizeCanvas() {
                 canvas.width = window.innerWidth;
@@ -235,26 +97,14 @@
 
             const butterfly = {
                 x: window.innerWidth * 0.5,
-                y: window.innerHeight * 0.68,
+                y: window.innerHeight * 0.72,
                 targetX: window.innerWidth * 0.5,
-                targetY: window.innerHeight * 0.68,
+                targetY: window.innerHeight * 0.72,
                 angle: 0
             };
 
-            const catBlack = {
-                x: window.innerWidth * 0.3,
-                y: window.innerHeight * 0.78,
-                color: '#1e272e',
-                eyeColor: '#ffdd59'
-            };
-
-            const catGolden = {
-                x: window.innerWidth * 0.42,
-                y: window.innerHeight * 0.81,
-                color: '#e1b12c',
-                stripeColor: '#b37700',
-                eyeColor: '#4cd137'
-            };
+            const catBlack = { x: window.innerWidth * 0.5 - 60, y: window.innerHeight * 0.78, color: '#1e272e', eyeColor: '#ffdd59' };
+            const catGolden = { x: window.innerWidth * 0.5 + 60, y: window.innerHeight * 0.78, color: '#e1b12c', stripeColor: '#b37700', eyeColor: '#4cd137' };
 
             function drawCloud(cx, cy, scale) {
                 ctx.save();
@@ -265,124 +115,163 @@
                 ctx.arc(cx + 30 * scale, cy + 8 * scale, 28 * scale, 0, Math.PI * 2);
                 ctx.arc(cx + 10 * scale, cy - 15 * scale, 26 * scale, 0, Math.PI * 2);
                 ctx.fill();
-
-                ctx.fillStyle = 'rgba(220, 230, 242, 0.4)';
-                ctx.beginPath();
-                ctx.arc(cx, cy + 12 * scale, 30 * scale, 0, Math.PI);
-                ctx.fill();
                 ctx.restore();
             }
 
-            function drawBlackCat(c, time) {
+            function drawDetailedButterfly(b, time) {
+                ctx.save();
+                ctx.translate(b.x, b.y);
+                const wingSway = Math.sin(time * 15) * 0.7 + 0.3;
+
+                // Glowing Effect
+                ctx.shadowColor = 'rgba(255, 107, 129, 0.8)';
+                ctx.shadowBlur = 10;
+
+                // Left Wing
+                ctx.fillStyle = '#ff4757';
+                ctx.beginPath();
+                ctx.ellipse(-8 * wingSway, -4, 10 * wingSway, 7, -0.2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#ffa502';
+                ctx.beginPath();
+                ctx.ellipse(-6 * wingSway, -3, 5 * wingSway, 3, -0.2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Right Wing
+                ctx.fillStyle = '#ff4757';
+                ctx.beginPath();
+                ctx.ellipse(8 * wingSway, -4, 10 * wingSway, 7, 0.2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#ffa502';
+                ctx.beginPath();
+                ctx.ellipse(6 * wingSway, -3, 5 * wingSway, 3, 0.2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Body
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#2f3542';
+                ctx.beginPath();
+                ctx.ellipse(0, 0, 2, 7, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Antennae
+                ctx.strokeStyle = '#2f3542';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(-1, -6); ctx.lineTo(-4, -12);
+                ctx.moveTo(1, -6); ctx.lineTo(4, -12);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            function drawFacingBlackCat(c, time, isFacingRight) {
                 ctx.save();
                 ctx.translate(c.x, c.y + Math.sin(time * 3) * 2);
+                const dir = isFacingRight ? 1 : -1;
 
+                // Tail Wave
                 ctx.strokeStyle = c.color;
                 ctx.lineWidth = 6;
                 ctx.lineCap = 'round';
                 ctx.beginPath();
-                ctx.moveTo(-14, -2);
-                ctx.quadraticCurveTo(-30, -20 + Math.sin(time * 4) * 10, -22, -34);
+                ctx.moveTo(-12 * dir, -2);
+                ctx.quadraticCurveTo(-26 * dir, -20 + Math.sin(time * 4) * 10, -18 * dir, -34);
                 ctx.stroke();
 
+                // Body
                 ctx.fillStyle = c.color;
                 ctx.beginPath();
                 ctx.ellipse(0, 0, 19, 14, 0, 0, Math.PI * 2);
                 ctx.fill();
 
+                // Head facing center
                 ctx.beginPath();
-                ctx.arc(14, -14, 12, 0, Math.PI * 2);
+                ctx.arc(12 * dir, -14, 12, 0, Math.PI * 2);
                 ctx.fill();
 
+                // Ears
                 ctx.beginPath();
-                ctx.moveTo(6, -20); ctx.lineTo(10, -30); ctx.lineTo(16, -22);
-                ctx.moveTo(15, -22); ctx.lineTo(20, -30); ctx.lineTo(24, -18);
+                ctx.moveTo(4 * dir, -20); ctx.lineTo(8 * dir, -30); ctx.lineTo(14 * dir, -22);
+                ctx.moveTo(13 * dir, -22); ctx.lineTo(18 * dir, -30); ctx.lineTo(22 * dir, -18);
                 ctx.fill();
 
-                ctx.fillStyle = '#ffb8b8';
-                ctx.beginPath();
-                ctx.moveTo(8, -21); ctx.lineTo(10, -27); ctx.lineTo(14, -22);
-                ctx.fill();
-
+                // Eyes focused upward on butterfly
                 ctx.fillStyle = c.eyeColor;
                 ctx.beginPath();
-                ctx.ellipse(19, -15, 3.5, 4.5, 0, 0, Math.PI * 2);
+                ctx.ellipse(16 * dir, -16, 3.5, 4.5, 0, 0, Math.PI * 2);
                 ctx.fill();
-
                 ctx.fillStyle = '#000000';
                 ctx.beginPath();
-                ctx.ellipse(19.5, -15, 1.2, 3.2, 0, 0, Math.PI * 2);
+                ctx.ellipse(16.5 * dir, -17, 1.2, 3.2, 0, 0, Math.PI * 2);
                 ctx.fill();
 
+                // Whiskers
                 ctx.strokeStyle = '#ffffff';
                 ctx.lineWidth = 0.8;
                 ctx.beginPath();
-                ctx.moveTo(23, -12); ctx.lineTo(33, -14);
-                ctx.moveTo(23, -10); ctx.lineTo(32, -8);
+                ctx.moveTo(20 * dir, -12); ctx.lineTo(30 * dir, -14);
+                ctx.moveTo(20 * dir, -10); ctx.lineTo(29 * dir, -8);
                 ctx.stroke();
 
                 ctx.restore();
             }
 
-            function drawGoldenCat(c, time) {
+            function drawFacingGoldenCat(c, time, isFacingRight) {
                 ctx.save();
                 ctx.translate(c.x, c.y + Math.cos(time * 3) * 2);
+                const dir = isFacingRight ? 1 : -1;
 
+                // Tail
                 ctx.strokeStyle = c.color;
                 ctx.lineWidth = 6;
                 ctx.lineCap = 'round';
                 ctx.beginPath();
-                ctx.moveTo(-14, -2);
-                ctx.quadraticCurveTo(-28, -18 + Math.cos(time * 4) * 10, -20, -32);
+                ctx.moveTo(-12 * dir, -2);
+                ctx.quadraticCurveTo(-26 * dir, -18 + Math.cos(time * 4) * 10, -18 * dir, -32);
                 ctx.stroke();
 
+                // Body
                 ctx.fillStyle = c.color;
                 ctx.beginPath();
                 ctx.ellipse(0, 0, 20, 15, 0, 0, Math.PI * 2);
                 ctx.fill();
 
+                // Stripes
                 ctx.fillStyle = c.stripeColor;
                 ctx.beginPath();
-                ctx.ellipse(-4, -4, 5, 10, 0.3, 0, Math.PI * 2);
-                ctx.ellipse(4, -2, 4, 9, 0.1, 0, Math.PI * 2);
+                ctx.ellipse(-4 * dir, -4, 5, 10, 0.3 * dir, 0, Math.PI * 2);
+                ctx.ellipse(4 * dir, -2, 4, 9, 0.1 * dir, 0, Math.PI * 2);
                 ctx.fill();
 
+                // Head facing center
                 ctx.fillStyle = c.color;
                 ctx.beginPath();
-                ctx.arc(14, -14, 12.5, 0, Math.PI * 2);
+                ctx.arc(12 * dir, -14, 12.5, 0, Math.PI * 2);
                 ctx.fill();
 
-                ctx.fillStyle = '#fff4e6';
+                // Ears
                 ctx.beginPath();
-                ctx.arc(19, -11, 4.5, 0, Math.PI * 2);
+                ctx.moveTo(5 * dir, -20); ctx.lineTo(9 * dir, -31); ctx.lineTo(15 * dir, -22);
+                ctx.moveTo(14 * dir, -22); ctx.lineTo(19 * dir, -31); ctx.lineTo(23 * dir, -18);
                 ctx.fill();
 
-                ctx.fillStyle = c.color;
-                ctx.beginPath();
-                ctx.moveTo(7, -20); ctx.lineTo(11, -31); ctx.lineTo(17, -22);
-                ctx.moveTo(16, -22); ctx.lineTo(21, -31); ctx.lineTo(25, -18);
-                ctx.fill();
-
+                // Eyes focused upward on butterfly
                 ctx.fillStyle = c.eyeColor;
                 ctx.beginPath();
-                ctx.ellipse(19, -16, 3.5, 4.5, 0, 0, Math.PI * 2);
+                ctx.ellipse(16 * dir, -17, 3.5, 4.5, 0, 0, Math.PI * 2);
                 ctx.fill();
-
                 ctx.fillStyle = '#000000';
                 ctx.beginPath();
-                ctx.ellipse(19.5, -16, 1.2, 3.2, 0, 0, Math.PI * 2);
+                ctx.ellipse(16.5 * dir, -18, 1.2, 3.2, 0, 0, Math.PI * 2);
                 ctx.fill();
 
-                ctx.fillStyle = '#ff7675';
-                ctx.beginPath();
-                ctx.arc(22.5, -13, 1.5, 0, Math.PI * 2);
-                ctx.fill();
-
+                // Whiskers
                 ctx.strokeStyle = '#57606f';
                 ctx.lineWidth = 0.8;
                 ctx.beginPath();
-                ctx.moveTo(22, -11); ctx.lineTo(31, -13);
-                ctx.moveTo(22, -9); ctx.lineTo(30, -7);
+                ctx.moveTo(20 * dir, -11); ctx.lineTo(29 * dir, -13);
+                ctx.moveTo(20 * dir, -9); ctx.lineTo(28 * dir, -7);
                 ctx.stroke();
 
                 ctx.restore();
@@ -392,6 +281,7 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 const time = Date.now() * 0.002;
 
+                // Sky
                 const skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.65);
                 skyGrad.addColorStop(0, '#0984e3');
                 skyGrad.addColorStop(0.4, '#74b9ff');
@@ -400,8 +290,8 @@
                 ctx.fillStyle = skyGrad;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                const sunX = canvas.width * 0.78;
-                const sunY = canvas.height * 0.16;
+                // Sun Glow
+                const sunX = canvas.width * 0.78, sunY = canvas.height * 0.16;
                 const sunGlow = ctx.createRadialGradient(sunX, sunY, 10, sunX, sunY, 200);
                 sunGlow.addColorStop(0, 'rgba(255, 255, 230, 0.95)');
                 sunGlow.addColorStop(0.3, 'rgba(255, 234, 167, 0.5)');
@@ -409,12 +299,14 @@
                 ctx.fillStyle = sunGlow;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+                // Clouds
                 clouds.forEach(c => {
                     c.x += c.speed;
                     if (c.x - 100 > canvas.width) c.x = -100;
                     drawCloud(c.x, c.y, c.scale);
                 });
 
+                // Meadow Ground
                 const groundY = canvas.height * 0.62;
                 const groundGrad = ctx.createLinearGradient(0, groundY, 0, canvas.height);
                 groundGrad.addColorStop(0, '#2ed573');
@@ -423,6 +315,7 @@
                 ctx.fillStyle = groundGrad;
                 ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
 
+                // Grass
                 for (let i = 0; i < grassBlades.length; i++) {
                     const b = grassBlades[i];
                     const sway = Math.sin(time * 2.5 + b.windOffset) * 5;
@@ -434,38 +327,31 @@
                     ctx.stroke();
                 }
 
+                // Flowers
                 flowers.forEach(f => {
                     ctx.fillStyle = f.type === 'daisy' ? '#ffffff' : '#ff7675';
-                    ctx.beginPath();
-                    ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2);
-                    ctx.fill();
-
+                    ctx.beginPath(); ctx.arc(f.x, f.y, f.size, 0, Math.PI * 2); ctx.fill();
                     ctx.fillStyle = '#fbc531';
-                    ctx.beginPath();
-                    ctx.arc(f.x, f.y, f.size * 0.4, 0, Math.PI * 2);
-                    ctx.fill();
+                    ctx.beginPath(); ctx.arc(f.x, f.y, f.size * 0.4, 0, Math.PI * 2); ctx.fill();
                 });
 
-                butterfly.angle += 0.12;
-                if (Math.random() < 0.02) {
-                    butterfly.targetX = Math.random() * (canvas.width * 0.6) + canvas.width * 0.2;
-                    butterfly.targetY = canvas.height * 0.6 + Math.random() * (canvas.height * 0.2);
-                }
-                butterfly.x += (butterfly.targetX - butterfly.x) * 0.03;
-                butterfly.y += (butterfly.targetY - butterfly.y) * 0.03 + Math.sin(butterfly.angle) * 2.5;
+                // Playful Butterfly Movement between Cats
+                butterfly.angle += 0.08;
+                const centerX = canvas.width * 0.5;
+                butterfly.targetX = centerX + Math.sin(butterfly.angle) * 70;
+                butterfly.targetY = canvas.height * 0.68 + Math.cos(butterfly.angle * 2) * 20;
 
-                ctx.fillStyle = '#ff4757';
-                const wingSplay = Math.abs(Math.sin(butterfly.angle * 2)) * 8 + 3;
-                ctx.beginPath();
-                ctx.ellipse(butterfly.x - 4, butterfly.y, wingSplay, 6, 0.2, 0, Math.PI * 2);
-                ctx.ellipse(butterfly.x + 4, butterfly.y, wingSplay, 6, -0.2, 0, Math.PI * 2);
-                ctx.fill();
+                butterfly.x += (butterfly.targetX - butterfly.x) * 0.05;
+                butterfly.y += (butterfly.targetY - butterfly.y) * 0.05;
 
-                catBlack.x += (butterfly.x - 50 - catBlack.x) * 0.025;
-                catGolden.x += (butterfly.x + 35 - catGolden.x) * 0.025;
+                drawDetailedButterfly(butterfly, time);
 
-                drawBlackCat(catBlack, time);
-                drawGoldenCat(catGolden, time);
+                // Cats Positioning Facing Each Other
+                catBlack.x = centerX - 75;
+                catGolden.x = centerX + 75;
+
+                drawFacingBlackCat(catBlack, time, true);   // Left cat facing Right
+                drawFacingGoldenCat(catGolden, time, false); // Right cat facing Left
 
                 requestAnimationFrame(renderMasterpiece);
             }
@@ -495,7 +381,7 @@
             });
 
             function typeWriterMessage() {
-                const text = "I have shut down my main accounts and cut out every unnecessary distraction.\n\nYour dedication, loyalty, and actions showed me what really matters. My energy and focus belong completely to our future now.\n\nNo distractions. Just us.";
+                const text = "Thê, you are a truly talented and capable girl. I sincerely respect, admire, and love you.\n\nYou are immensely valuable to me—one of a kind, irreplaceable. You might think I am exaggerating, but having met many people, I can confidently say no one comes close to your qualities.\n\nWhen I was surrounded by betrayal and completely broken, you became my sole emotional supporter. Your hard work, dedication, and endurance inspired me and gave me strength.\n\nThat is why I will try my best to take even better care of you. To stay away from other girls, I have shut down my main account and switched to a private account shared only with you and my closest friends. My attention belongs solely to you.\n\nSo, let us work hard and build our future together.";
                 let index = 0;
                 const target = document.getElementById('typed-text');
                 target.innerHTML = "";
@@ -504,7 +390,7 @@
                     if (index < text.length) {
                         target.innerHTML += text.charAt(index) === '\n' ? '<br>' : text.charAt(index);
                         index++;
-                        setTimeout(type, 35);
+                        setTimeout(type, 30);
                     }
                 }
                 type();
@@ -512,5 +398,4 @@
         });
     </script>
 </body>
-    </html>
-    
+</html>

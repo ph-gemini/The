@@ -19,7 +19,7 @@
         #step-3 { display: none; width: 90%; max-width: 600px; z-index: 10; }
         .clean-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); padding: 35px 30px; border-radius: 28px; border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12); text-align: center; max-height: 85vh; display: flex; flex-direction: column; }
         .card-header { color: #2f3542; font-size: 26px; font-weight: 800; margin-bottom: 15px; letter-spacing: 1px; flex-shrink: 0; }
-        .scroll-container { overflow-y: auto; padding-right: 10px; max-height: 50vh; text-align: left; }
+        .scroll-container { overflow-y: auto; padding-right: 10px; max-height: 50vh; text-align: left; -webkit-overflow-scrolling: touch; }
         .scroll-container::-webkit-scrollbar { width: 6px; }
         .scroll-container::-webkit-scrollbar-thumb { background: #ff6b81; border-radius: 10px; }
         .message-content { font-size: 15px; line-height: 1.8; color: #57606f; white-space: pre-line; font-weight: 600; }
@@ -55,7 +55,7 @@
         window.addEventListener('load', () => {
             const canvas = document.getElementById('art-canvas');
             const ctx = canvas.getContext('2d');
-            let grassBlades = [], flowers = [], clouds = [];
+            let grassBlades = [], detailedFlowers = [], floatingPetals = [], clouds = [];
 
             function resizeCanvas() {
                 canvas.width = window.innerWidth;
@@ -64,8 +64,9 @@
             }
 
             function initEnvironment() {
+                // Grass
                 grassBlades = [];
-                const grassCount = Math.floor(canvas.width * 2);
+                const grassCount = Math.floor(canvas.width * 2.5);
                 const startY = canvas.height * 0.62;
                 const grassColors = ['#2ed573', '#26af5f', '#10ac84', '#7bed9f', '#05c46b'];
 
@@ -80,29 +81,50 @@
                     });
                 }
 
-                flowers = [];
-                const flowerCount = Math.floor(canvas.width * 0.12);
+                // Detailed Flowers
+                detailedFlowers = [];
+                const flowerCount = Math.floor(canvas.width * 0.08);
+                const petalColors = ['#ff7675', '#ff9ff3', '#feca57', '#ffffff', '#ff6b6b'];
+
                 for (let i = 0; i < flowerCount; i++) {
-                    flowers.push({
+                    detailedFlowers.push({
                         x: Math.random() * canvas.width,
-                        y: startY + 20 + Math.random() * (canvas.height - startY - 40),
-                        size: Math.random() * 4 + 3,
-                        color: Math.random() < 0.5 ? '#ffffff' : '#ff7675',
+                        y: startY + 25 + Math.random() * (canvas.height - startY - 50),
+                        stemHeight: Math.random() * 25 + 20,
+                        petalColor: petalColors[Math.floor(Math.random() * petalColors.length)],
+                        petalCount: Math.floor(Math.random() * 2) + 5,
+                        size: Math.random() * 4 + 5,
                         offset: Math.random() * Math.PI * 2
                     });
                 }
 
+                // Floating Petals
+                floatingPetals = [];
+                for (let i = 0; i < 25; i++) {
+                    floatingPetals.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        size: Math.random() * 3 + 3,
+                        color: petalColors[Math.floor(Math.random() * petalColors.length)],
+                        vx: Math.random() * 1 + 0.5,
+                        vy: Math.random() * 0.8 + 0.3,
+                        angle: Math.random() * Math.PI * 2,
+                        spin: (Math.random() - 0.5) * 0.05
+                    });
+                }
+
+                // Clouds
                 clouds = [
-                    { x: 50, y: canvas.height * 0.12, scale: 0.9, speed: 0.4 },
-                    { x: canvas.width * 0.4, y: canvas.height * 0.08, scale: 1.2, speed: 0.5 },
-                    { x: canvas.width * 0.75, y: canvas.height * 0.15, scale: 0.8, speed: 0.3 }
+                    { x: 50, y: canvas.height * 0.12, scale: 0.9, speed: 0.3 },
+                    { x: canvas.width * 0.4, y: canvas.height * 0.08, scale: 1.2, speed: 0.4 },
+                    { x: canvas.width * 0.75, y: canvas.height * 0.15, scale: 0.8, speed: 0.25 }
                 ];
             }
 
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
 
-            const butterfly = { x: window.innerWidth * 0.5, y: window.innerHeight * 0.68 };
+            const butterfly = { x: window.innerWidth * 0.5, y: window.innerHeight * 0.65 };
 
             function drawCloud(c) {
                 ctx.save();
@@ -118,12 +140,18 @@
             function drawButterfly(x, y, time) {
                 ctx.save();
                 ctx.translate(x, y);
-                const wing = Math.sin(time * 15) * 8 + 2;
+                const wing = Math.sin(time * 18) * 9 + 2;
 
                 ctx.fillStyle = '#ff4757';
                 ctx.beginPath();
                 ctx.ellipse(-wing/2, -2, Math.abs(wing), 7, -0.2, 0, Math.PI * 2);
                 ctx.ellipse(wing/2, -2, Math.abs(wing), 7, 0.2, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffa502';
+                ctx.beginPath();
+                ctx.ellipse(-wing/3, -2, Math.abs(wing/2), 4, -0.2, 0, Math.PI * 2);
+                ctx.ellipse(wing/3, -2, Math.abs(wing/2), 4, 0.2, 0, Math.PI * 2);
                 ctx.fill();
 
                 ctx.fillStyle = '#2f3542';
@@ -133,9 +161,53 @@
                 ctx.restore();
             }
 
-            function drawBlackCat(x, y, targetX, targetY, time) {
+            function drawDetailedFlower(f, time) {
                 ctx.save();
-                ctx.translate(x, y);
+                const sway = Math.sin(time * 2 + f.offset) * 4;
+                const topX = f.x + sway;
+                const topY = f.y - f.stemHeight;
+
+                // Stem
+                ctx.strokeStyle = '#10ac84';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(f.x, f.y);
+                ctx.quadraticCurveTo(f.x + sway * 0.5, f.y - f.stemHeight * 0.5, topX, topY);
+                ctx.stroke();
+
+                // Leaves
+                ctx.fillStyle = '#10ac84';
+                ctx.beginPath();
+                ctx.ellipse(f.x + sway * 0.3 - 4, f.y - f.stemHeight * 0.4, 6, 3, -0.5, 0, Math.PI * 2);
+                ctx.ellipse(f.x + sway * 0.3 + 4, f.y - f.stemHeight * 0.5, 6, 3, 0.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Petals
+                ctx.fillStyle = f.petalColor;
+                for (let i = 0; i < f.petalCount; i++) {
+                    const angle = (i * Math.PI * 2) / f.petalCount;
+                    const px = topX + Math.cos(angle) * f.size;
+                    const py = topY + Math.sin(angle) * f.size;
+                    ctx.beginPath();
+                    ctx.arc(px, py, f.size * 0.6, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Flower Center
+                ctx.fillStyle = '#fbc531';
+                ctx.beginPath();
+                ctx.arc(topX, topY, f.size * 0.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            // Black Cat (Facing Right, Jumping & Reaching Paw)
+            function drawJumpingBlackCat(x, y, targetX, targetY, time) {
+                ctx.save();
+                // Jumping animation height logic
+                const jumpOffset = Math.abs(Math.sin(time * 3.5)) * 28;
+                ctx.translate(x, y - jumpOffset);
 
                 // Body
                 ctx.fillStyle = '#1e272e';
@@ -143,47 +215,51 @@
                 ctx.ellipse(0, 0, 18, 14, 0, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Paw playing with butterfly
-                const pawY = Math.sin(time * 8) * 10 - 5;
+                // Reaching Paw
+                const pawY = -12 - Math.sin(time * 7) * 8;
                 ctx.strokeStyle = '#1e272e';
-                ctx.lineWidth = 4;
+                ctx.lineWidth = 4.5;
+                ctx.lineCap = 'round';
                 ctx.beginPath();
-                ctx.moveTo(8, 0);
-                ctx.lineTo(20, pawY);
+                ctx.moveTo(8, -2);
+                ctx.lineTo(22, pawY);
                 ctx.stroke();
 
                 // Head
                 ctx.beginPath();
-                ctx.arc(10, -12, 11, 0, Math.PI * 2);
+                ctx.arc(10, -14, 11, 0, Math.PI * 2);
                 ctx.fill();
 
                 // Ears
                 ctx.beginPath();
-                ctx.moveTo(3, -18); ctx.lineTo(7, -26); ctx.lineTo(12, -20);
-                ctx.moveTo(11, -20); ctx.lineTo(16, -26); ctx.lineTo(19, -16);
+                ctx.moveTo(3, -20); ctx.lineTo(7, -28); ctx.lineTo(12, -22);
+                ctx.moveTo(11, -22); ctx.lineTo(16, -28); ctx.lineTo(19, -18);
                 ctx.fill();
 
                 // Eye Tracking
-                const angle = Math.atan2(targetY - (y - 12), targetX - (x + 10));
-                const ex = Math.cos(angle) * 2;
-                const ey = Math.sin(angle) * 2;
+                const angle = Math.atan2(targetY - (y - jumpOffset - 14), targetX - (x + 10));
+                const ex = Math.cos(angle) * 2.2;
+                const ey = Math.sin(angle) * 2.2;
 
                 ctx.fillStyle = '#ffdd59';
                 ctx.beginPath();
-                ctx.arc(14, -13, 3.5, 0, Math.PI * 2);
+                ctx.arc(14, -15, 3.5, 0, Math.PI * 2);
                 ctx.fill();
 
                 ctx.fillStyle = '#000000';
                 ctx.beginPath();
-                ctx.arc(14 + ex, -13 + ey, 1.5, 0, Math.PI * 2);
+                ctx.arc(14 + ex, -15 + ey, 1.5, 0, Math.PI * 2);
                 ctx.fill();
 
                 ctx.restore();
             }
 
-            function drawGoldenCat(x, y, targetX, targetY, time) {
+            // Golden Cat (Facing Left, Jumping & Reaching Paw)
+            function drawJumpingGoldenCat(x, y, targetX, targetY, time) {
                 ctx.save();
-                ctx.translate(x, y);
+                // Alternating jump cycle
+                const jumpOffset = Math.abs(Math.cos(time * 3.5)) * 28;
+                ctx.translate(x, y - jumpOffset);
 
                 // Body
                 ctx.fillStyle = '#d35400';
@@ -191,39 +267,40 @@
                 ctx.ellipse(0, 0, 18, 14, 0, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Paw playing
-                const pawY = Math.cos(time * 8) * 10 - 5;
+                // Reaching Paw
+                const pawY = -12 - Math.cos(time * 7) * 8;
                 ctx.strokeStyle = '#d35400';
-                ctx.lineWidth = 4;
+                ctx.lineWidth = 4.5;
+                ctx.lineCap = 'round';
                 ctx.beginPath();
-                ctx.moveTo(-8, 0);
-                ctx.lineTo(-20, pawY);
+                ctx.moveTo(-8, -2);
+                ctx.lineTo(-22, pawY);
                 ctx.stroke();
 
                 // Head
                 ctx.beginPath();
-                ctx.arc(-10, -12, 11, 0, Math.PI * 2);
+                ctx.arc(-10, -14, 11, 0, Math.PI * 2);
                 ctx.fill();
 
                 // Ears
                 ctx.beginPath();
-                ctx.moveTo(-3, -18); ctx.lineTo(-7, -26); ctx.lineTo(-12, -20);
-                ctx.moveTo(-11, -20); ctx.lineTo(-16, -26); ctx.lineTo(-19, -16);
+                ctx.moveTo(-3, -20); ctx.lineTo(-7, -28); ctx.lineTo(-12, -22);
+                ctx.moveTo(-11, -22); ctx.lineTo(-16, -28); ctx.lineTo(-19, -18);
                 ctx.fill();
 
                 // Eye Tracking
-                const angle = Math.atan2(targetY - (y - 12), targetX - (x - 10));
-                const ex = Math.cos(angle) * 2;
-                const ey = Math.sin(angle) * 2;
+                const angle = Math.atan2(targetY - (y - jumpOffset - 14), targetX - (x - 10));
+                const ex = Math.cos(angle) * 2.2;
+                const ey = Math.sin(angle) * 2.2;
 
                 ctx.fillStyle = '#2ecc71';
                 ctx.beginPath();
-                ctx.arc(-14, -13, 3.5, 0, Math.PI * 2);
+                ctx.arc(-14, -15, 3.5, 0, Math.PI * 2);
                 ctx.fill();
 
                 ctx.fillStyle = '#000000';
                 ctx.beginPath();
-                ctx.arc(-14 + ex, -13 + ey, 1.5, 0, Math.PI * 2);
+                ctx.arc(-14 + ex, -15 + ey, 1.5, 0, Math.PI * 2);
                 ctx.fill();
 
                 ctx.restore();
@@ -240,7 +317,7 @@
                 ctx.fillStyle = skyGrad;
                 ctx.fillRect(0, 0, canvas.width, canvas.height * 0.62);
 
-                // Clouds
+                // Moving Clouds
                 clouds.forEach(c => {
                     c.x += c.speed;
                     if (c.x - 60 > canvas.width) c.x = -60;
@@ -252,7 +329,7 @@
                 ctx.fillStyle = '#2ed573';
                 ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
 
-                // Grass Swaying
+                // Swaying Grass
                 grassBlades.forEach(b => {
                     const sway = Math.sin(time * 3 + b.offset) * 5;
                     ctx.strokeStyle = b.color;
@@ -263,34 +340,50 @@
                     ctx.stroke();
                 });
 
-                // Flowers Swaying
-                flowers.forEach(f => {
-                    const sway = Math.sin(time * 2 + f.offset) * 3;
-                    ctx.fillStyle = f.color;
-                    ctx.beginPath();
-                    ctx.arc(f.x + sway, f.y, f.size, 0, Math.PI * 2);
-                    ctx.fill();
+                // Detailed Swaying Flowers
+                detailedFlowers.forEach(f => {
+                    drawDetailedFlower(f, time);
                 });
 
-                // Butterfly Movement between Cats
+                // Floating Petals in Air
+                floatingPetals.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.angle += p.spin;
+
+                    if (p.x > canvas.width) p.x = -10;
+                    if (p.y > canvas.height) p.y = -10;
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.angle);
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                });
+
+                // Butterfly Dynamic Flight (Dancing between cats)
                 const centerX = canvas.width * 0.5;
-                butterfly.x = centerX + Math.sin(time * 2) * 60;
-                butterfly.y = canvas.height * 0.68 + Math.cos(time * 3) * 15;
+                butterfly.x = centerX + Math.sin(time * 2.2) * 75;
+                butterfly.y = canvas.height * 0.64 + Math.cos(time * 3.5) * 35;
                 drawButterfly(butterfly.x, butterfly.y, time);
 
-                // Cats Facing Each Other
-                const cat1X = centerX - 70;
-                const cat2X = centerX + 70;
+                // Jumping Cats Facing Each Other
+                const cat1X = centerX - 80;
+                const cat2X = centerX + 80;
                 const catY = canvas.height * 0.76;
 
-                drawBlackCat(cat1X, catY, butterfly.x, butterfly.y, time);
-                drawGoldenCat(cat2X, catY, butterfly.x, butterfly.y, time);
+                drawJumpingBlackCat(cat1X, catY, butterfly.x, butterfly.y, time);
+                drawJumpingGoldenCat(cat2X, catY, butterfly.x, butterfly.y, time);
 
                 requestAnimationFrame(animate);
             }
 
             animate();
 
+            // Button Event
             document.getElementById('open-btn').addEventListener('click', () => {
                 if (typeof confetti === 'function') {
                     confetti({ particleCount: 80, spread: 90, origin: { y: 0.6 } });
@@ -313,6 +406,7 @@
                 }, 30);
             });
 
+            // Typewriter logic allowing smooth user scrolling
             function typeWriterMessage() {
                 const text = "Thê, you are a truly talented and capable girl. I sincerely respect, admire, and love you.\n\nYou are immensely valuable to me—one of a kind, irreplaceable. You might think I am exaggerating, but having met many people, I can confidently say no one comes close to your qualities.\n\nWhen I was surrounded by betrayal and completely broken, you became my sole emotional supporter. Your hard work, dedication, and endurance inspired me and gave me strength.\n\nThat is why I will try my best to take even better care of you. To stay away from other girls, I have shut down my main account and switched to a private account shared only with you and my closest friends. My attention belongs solely to you.\n\nSo, let us work hard and build our future together.";
                 let index = 0;
@@ -320,12 +414,26 @@
                 const scrollBox = document.getElementById('scroll-box');
                 target.innerHTML = "";
 
+                let userScrolledUp = false;
+
+                // Detect if user is scrolling manually
+                scrollBox.addEventListener('scroll', () => {
+                    const isAtBottom = scrollBox.scrollHeight - scrollBox.clientHeight - scrollBox.scrollTop < 30;
+                    userScrolledUp = !isAtBottom;
+                });
+
                 function type() {
                     if (index < text.length) {
                         target.innerHTML += text.charAt(index) === '\n' ? '<br>' : text.charAt(index);
                         index++;
-                        scrollBox.scrollTop = scrollBox.scrollHeight;
-                        setTimeout(type, 30);
+
+                        // Auto scroll to bottom ONLY if user hasn't scrolled up manually
+                        if (!userScrolledUp) {
+                            scrollBox.scrollTop = scrollBox.scrollHeight;
+                        }
+
+                        // Slower typing speed (75ms per character)
+                        setTimeout(type, 75);
                     }
                 }
                 type();

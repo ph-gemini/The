@@ -135,18 +135,6 @@
             border: 2px solid #ff80ab;
             box-shadow: 0 0 35px #ff80ab, 0 0 70px rgba(255, 64, 129, 0.3);
             position: relative;
-            animation: boxSingleGlow 2.5s infinite alternate ease-in-out;
-        }
-
-        @keyframes boxSingleGlow {
-            0% {
-                border-color: rgba(255, 128, 171, 0.6);
-                box-shadow: 0 0 20px #ff80ab, 0 0 40px rgba(255, 64, 129, 0.3);
-            }
-            100% {
-                border-color: rgba(255, 128, 171, 1);
-                box-shadow: 0 0 40px #ff80ab, 0 0 80px rgba(255, 64, 129, 0.6);
-            }
         }
 
         .card-header {
@@ -209,7 +197,7 @@
 </head>
 <body>
 
-    <!-- Canvas Engine for Masterpiece Art -->
+    <!-- Canvas Engine for Background Art -->
     <canvas id="art-canvas"></canvas>
 
     <!-- Outer Screen Frame Glow -->
@@ -229,10 +217,10 @@
         <div style="font-size: 14px; color: #880e4f; font-weight: 700;">Opening your private letter...</div>
     </div>
 
-    <!-- Step 3 -->
+    <!-- Step 3 (Corrected HTML Structure) -->
     <div id="step-3">
         <div class="card-tilt">
-            <div class="card-header">A NEW CHAPTER 🇻🇳 ❤️️</div>
+            <div class="card-header">A NEW CHAPTER 🇻🇳 ❤️</div>
             <div class="message-content" id="typed-text"></div>
             <div class="action-area">
                 <a href="https://zalo.me" class="zalo-btn" target="_blank">Connect on Zalo</a>
@@ -241,352 +229,191 @@
     </div>
 
     <script>
-        const canvas = document.getElementById('art-canvas');
-        const ctx = canvas.getContext('2d');
+        window.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('art-canvas');
+            const ctx = canvas.getContext('2d');
 
-        let grassBlades = [];
+            let grassBlades = [];
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            generateGrassBlades();
-        }
-
-        // Generate Micro Grass Blades
-        function generateGrassBlades() {
-            grassBlades = [];
-            const count = Math.floor(canvas.width * 1.2);
-            const grassStartY = canvas.height * 0.65;
-            
-            for (let i = 0; i < count; i++) {
-                const x = Math.random() * canvas.width;
-                const y = grassStartY + Math.random() * (canvas.height - grassStartY);
-                const height = Math.random() * 22 + 12;
-                const curve = (Math.random() - 0.5) * 15;
-                const shade = Math.random();
-                
-                let color;
-                if (shade < 0.33) color = '#7ec850';
-                else if (shade < 0.66) color = '#5ba829';
-                else color = '#3d7e17';
-
-                grassBlades.push({ x, y, height, curve, color, windOffset: Math.random() * Math.PI * 2 });
-            }
-        }
-
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        // Butterfly Entity
-        const butterfly = {
-            x: window.innerWidth * 0.5,
-            y: window.innerHeight * 0.7,
-            targetX: window.innerWidth * 0.5,
-            targetY: window.innerHeight * 0.7,
-            angle: 0
-        };
-
-        // Black Cat
-        const catBlack = {
-            x: window.innerWidth * 0.3,
-            y: window.innerHeight * 0.8,
-            targetX: window.innerWidth * 0.3,
-            jumpHeight: 0,
-            isJumping: false,
-            color: '#1a1a1a',
-            eyeColor: '#ffeb3b'
-        };
-
-        // Golden-Brown Cat
-        const catGolden = {
-            x: window.innerWidth * 0.4,
-            y: window.innerHeight * 0.83,
-            targetX: window.innerWidth * 0.4,
-            jumpHeight: 0,
-            isJumping: false,
-            color: '#d48817',
-            patchColor: '#8c5005',
-            eyeColor: '#4caf50'
-        };
-
-        // Sun Sparkles
-        const sparkles = Array.from({ length: 45 }, () => ({
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-            r: Math.random() * 2.5 + 1,
-            speedY: -Math.random() * 0.6 - 0.2
-        }));
-
-        function drawCloud(cx, cy, radius, fillStyle) {
-            ctx.fillStyle = fillStyle;
-            ctx.beginPath();
-            ctx.arc(cx, cy, radius * 0.5, 0, Math.PI * 2);
-            ctx.arc(cx - radius * 0.4, cy + 10, radius * 0.35, 0, Math.PI * 2);
-            ctx.arc(cx + radius * 0.4, cy + 10, radius * 0.38, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        function updateCat(cat, targetX, time, offset) {
-            cat.targetX = targetX;
-            cat.x += (cat.targetX - cat.x) * 0.035;
-            cat.y = canvas.height * 0.81 + Math.sin(time * 2.5 + offset) * 3;
-
-            if (Math.abs(cat.x - targetX) < 25 && !cat.isJumping && Math.random() < 0.03) {
-                cat.isJumping = true;
-                cat.jumpHeight = 26;
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                generateGrass();
             }
 
-            if (cat.isJumping) {
-                cat.jumpHeight -= 1.4;
-                if (cat.jumpHeight <= 0) {
-                    cat.jumpHeight = 0;
-                    cat.isJumping = false;
+            function generateGrass() {
+                grassBlades = [];
+                const count = Math.floor(canvas.width * 1.2);
+                const startY = canvas.height * 0.65;
+
+                for (let i = 0; i < count; i++) {
+                    grassBlades.push({
+                        x: Math.random() * canvas.width,
+                        y: startY + Math.random() * (canvas.height - startY),
+                        height: Math.random() * 22 + 12,
+                        curve: (Math.random() - 0.5) * 15,
+                        color: Math.random() < 0.5 ? '#7ec850' : '#5ba829',
+                        windOffset: Math.random() * Math.PI * 2
+                    });
                 }
             }
-        }
 
-        // Draw Black Cat
-        function drawBlackCat(c, time) {
-            const renderY = c.y - c.jumpHeight;
-            ctx.save();
-            ctx.translate(c.x, renderY);
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
 
-            // Tail
-            ctx.strokeStyle = c.color;
-            ctx.lineWidth = 5;
-            ctx.beginPath();
-            ctx.moveTo(-12, -4);
-            ctx.quadraticCurveTo(-26, -22 + Math.sin(time * 4) * 8, -18, -32);
-            ctx.stroke();
+            const butterfly = {
+                x: window.innerWidth * 0.5,
+                y: window.innerHeight * 0.7,
+                targetX: window.innerWidth * 0.5,
+                targetY: window.innerHeight * 0.7,
+                angle: 0
+            };
 
-            // Body
-            ctx.fillStyle = c.color;
-            ctx.beginPath();
-            ctx.ellipse(0, 0, 17, 13, 0, 0, Math.PI * 2);
-            ctx.fill();
+            const catBlack = {
+                x: window.innerWidth * 0.3,
+                y: window.innerHeight * 0.8,
+                color: '#1a1a1a',
+                eyeColor: '#ffeb3b'
+            };
 
-            // Head
-            ctx.beginPath();
-            ctx.arc(12, -12, 11, 0, Math.PI * 2);
-            ctx.fill();
+            const catGolden = {
+                x: window.innerWidth * 0.4,
+                y: window.innerHeight * 0.83,
+                color: '#d48817',
+                eyeColor: '#4caf50'
+            };
 
-            // Ears
-            ctx.beginPath();
-            ctx.moveTo(5, -18); ctx.lineTo(9, -27); ctx.lineTo(14, -20);
-            ctx.moveTo(13, -20); ctx.lineTo(18, -27); ctx.lineTo(21, -16);
-            ctx.fill();
+            function drawCat(c, time, isGolden) {
+                ctx.save();
+                ctx.translate(c.x, c.y + Math.sin(time * 3) * 3);
 
-            // Yellow Eye
-            ctx.fillStyle = c.eyeColor;
-            ctx.beginPath();
-            ctx.arc(17, -13, 2.5, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.restore();
-        }
-
-        // Draw Golden-Brown Cat
-        function drawGoldenCat(c, time) {
-            const renderY = c.y - c.jumpHeight;
-            ctx.save();
-            ctx.translate(c.x, renderY);
-
-            // Tail
-            ctx.strokeStyle = c.color;
-            ctx.lineWidth = 6;
-            ctx.beginPath();
-            ctx.moveTo(-12, -4);
-            ctx.quadraticCurveTo(-25, -20 + Math.cos(time * 4) * 8, -16, -30);
-            ctx.stroke();
-
-            // Body
-            ctx.fillStyle = c.color;
-            ctx.beginPath();
-            ctx.ellipse(0, 0, 18, 14, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Dark Brown Patch
-            ctx.fillStyle = c.patchColor;
-            ctx.beginPath();
-            ctx.ellipse(-3, -3, 9, 7, 0.2, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Head
-            ctx.fillStyle = c.color;
-            ctx.beginPath();
-            ctx.arc(13, -12, 11.5, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Ears
-            ctx.beginPath();
-            ctx.moveTo(6, -18); ctx.lineTo(10, -27); ctx.lineTo(15, -20);
-            ctx.moveTo(14, -20); ctx.lineTo(19, -27); ctx.lineTo(22, -16);
-            ctx.fill();
-
-            // Green Eyes & Blush
-            ctx.fillStyle = c.eyeColor;
-            ctx.beginPath();
-            ctx.arc(18, -13, 2.5, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = '#ff80ab';
-            ctx.beginPath();
-            ctx.arc(16, -9, 3, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.restore();
-        }
-
-        function renderArt() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const time = Date.now() * 0.0025;
-
-            // 1. Sky Gradient
-            const skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.75);
-            skyGrad.addColorStop(0, '#ff9a9e');
-            skyGrad.addColorStop(0.35, '#fecfef');
-            skyGrad.addColorStop(0.7, '#a1c4fd');
-            skyGrad.addColorStop(1, '#c2e9fb');
-            ctx.fillStyle = skyGrad;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Sunlight Bloom
-            const sunGrad = ctx.createRadialGradient(canvas.width * 0.8, canvas.height * 0.25, 10, canvas.width * 0.8, canvas.height * 0.25, 280);
-            sunGrad.addColorStop(0, 'rgba(255, 255, 220, 0.8)');
-            sunGrad.addColorStop(0.4, 'rgba(255, 224, 178, 0.35)');
-            sunGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-            ctx.fillStyle = sunGrad;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // 2. Cloud Layers
-            drawCloud(canvas.width * 0.2, canvas.height * 0.22, 90, 'rgba(255, 255, 255, 0.6)');
-            drawCloud(canvas.width * 0.65, canvas.height * 0.18, 110, 'rgba(255, 255, 255, 0.5)');
-
-            // 3. Ground Base Gradient
-            const groundBaseY = canvas.height * 0.65;
-            const groundGrad = ctx.createLinearGradient(0, groundBaseY, 0, canvas.height);
-            groundGrad.addColorStop(0, '#9cd84e');
-            groundGrad.addColorStop(0.4, '#5ba829');
-            groundGrad.addColorStop(1, '#2d5c0e');
-            ctx.fillStyle = groundGrad;
-            ctx.fillRect(0, groundBaseY, canvas.width, canvas.height - groundBaseY);
-
-            // 4. Render Micro Grass Blades
-            ctx.lineWidth = 1.8;
-            for (let i = 0; i < grassBlades.length; i++) {
-                const b = grassBlades[i];
-                const sway = Math.sin(time * 2 + b.windOffset) * 4;
-                ctx.strokeStyle = b.color;
+                // Tail
+                ctx.strokeStyle = c.color;
+                ctx.lineWidth = 5;
                 ctx.beginPath();
-                ctx.moveTo(b.x, b.y);
-                ctx.quadraticCurveTo(b.x + b.curve, b.y - b.height * 0.5, b.x + b.curve + sway, b.y - b.height);
+                ctx.moveTo(-12, -4);
+                ctx.quadraticCurveTo(-26, -22 + Math.sin(time * 4) * 8, -18, -32);
                 ctx.stroke();
-            }
 
-            // 5. Update Butterfly
-            butterfly.angle += 0.12;
-            if (Math.random() < 0.02) {
-                butterfly.targetX = Math.random() * (canvas.width * 0.7) + canvas.width * 0.15;
-                butterfly.targetY = canvas.height * 0.64 + Math.random() * (canvas.height * 0.2);
-            }
-            butterfly.x += (butterfly.targetX - butterfly.x) * 0.035;
-            butterfly.y += (butterfly.targetY - butterfly.y) * 0.035 + Math.sin(butterfly.angle) * 1.8;
-
-            // Render Butterfly
-            ctx.fillStyle = '#e91e63';
-            const wingWidth = Math.abs(Math.sin(butterfly.angle * 2.5)) * 10 + 4;
-            ctx.beginPath();
-            ctx.ellipse(butterfly.x - 4, butterfly.y, wingWidth, 7, 0.3, 0, Math.PI * 2);
-            ctx.ellipse(butterfly.x + 4, butterfly.y, wingWidth, 7, -0.3, 0, Math.PI * 2);
-            ctx.fill();
-
-            // 6. Cats Logic & Rendering
-            updateCat(catBlack, butterfly.x - 45, time, 0);
-            updateCat(catGolden, butterfly.x + 25, time, 1);
-
-            drawBlackCat(catBlack, time);
-            drawGoldenCat(catGolden, time);
-
-            // 7. Sparkles
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-            sparkles.forEach(s => {
+                // Body
+                ctx.fillStyle = c.color;
                 ctx.beginPath();
-                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.ellipse(0, 0, 17, 13, 0, 0, Math.PI * 2);
                 ctx.fill();
-                s.y += s.speedY;
-                if (s.y < 0) s.y = canvas.height;
+
+                // Head
+                ctx.beginPath();
+                ctx.arc(12, -12, 11, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Ears
+                ctx.beginPath();
+                ctx.moveTo(5, -18); ctx.lineTo(9, -27); ctx.lineTo(14, -20);
+                ctx.moveTo(13, -20); ctx.lineTo(18, -27); ctx.lineTo(21, -16);
+                ctx.fill();
+
+                // Eye
+                ctx.fillStyle = c.eyeColor;
+                ctx.beginPath();
+                ctx.arc(17, -13, 2.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            function render() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const time = Date.now() * 0.0025;
+
+                // Sky
+                const skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.7);
+                skyGrad.addColorStop(0, '#ff9a9e');
+                skyGrad.addColorStop(1, '#c2e9fb');
+                ctx.fillStyle = skyGrad;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Ground
+                const groundY = canvas.height * 0.65;
+                ctx.fillStyle = '#5ba829';
+                ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+
+                // Grass
+                ctx.lineWidth = 1.8;
+                for (let i = 0; i < grassBlades.length; i++) {
+                    const b = grassBlades[i];
+                    const sway = Math.sin(time * 2 + b.windOffset) * 4;
+                    ctx.strokeStyle = b.color;
+                    ctx.beginPath();
+                    ctx.moveTo(b.x, b.y);
+                    ctx.quadraticCurveTo(b.x + b.curve, b.y - b.height * 0.5, b.x + b.curve + sway, b.y - b.height);
+                    ctx.stroke();
+                }
+
+                // Butterfly Logic
+                butterfly.angle += 0.1;
+                if (Math.random() < 0.02) {
+                    butterfly.targetX = Math.random() * (canvas.width * 0.6) + canvas.width * 0.2;
+                    butterfly.targetY = canvas.height * 0.65 + Math.random() * (canvas.height * 0.2);
+                }
+                butterfly.x += (butterfly.targetX - butterfly.x) * 0.03;
+                butterfly.y += (butterfly.targetY - butterfly.y) * 0.03 + Math.sin(butterfly.angle) * 2;
+
+                ctx.fillStyle = '#e91e63';
+                ctx.beginPath();
+                ctx.arc(butterfly.x, butterfly.y, 5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Cats Movement
+                catBlack.x += (butterfly.x - 40 - catBlack.x) * 0.02;
+                catGolden.x += (butterfly.x + 30 - catGolden.x) * 0.02;
+
+                drawCat(catBlack, time, false);
+                drawCat(catGolden, time, true);
+
+                requestAnimationFrame(render);
+            }
+
+            render();
+
+            /* Button Event Handlers */
+            document.getElementById('open-btn').addEventListener('click', () => {
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 80, spread: 100, origin: { y: 0.6 } });
+                }
+
+                document.getElementById('step-1').style.display = 'none';
+                document.getElementById('step-2').style.display = 'flex';
+
+                let progress = 0;
+                const progressBar = document.getElementById('p-bar');
+                const interval = setInterval(() => {
+                    progress += 4;
+                    progressBar.style.width = progress + '%';
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        document.getElementById('step-2').style.display = 'none';
+                        document.getElementById('step-3').style.display = 'block';
+                        typeWriterMessage();
+                    }
+                }, 30);
             });
 
-            requestAnimationFrame(renderArt);
-        }
+            function typeWriterMessage() {
+                const text = "I have shut down my main accounts and cut out every unnecessary distraction.\n\nYour dedication, loyalty, and actions showed me what really matters. My energy and focus belong completely to our future now.\n\nNo distractions. Just us.";
+                let index = 0;
+                const target = document.getElementById('typed-text');
+                target.innerHTML = "";
 
-        renderArt();
-
-        /* ----- UI Interactivity ----- */
-        document.getElementById('open-btn').addEventListener('click', function() {
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 90,
-                    spread: 110,
-                    origin: { y: 0.6 },
-                    colors: ['#da251d', '#ff1744', '#ffc107', '#ff4081']
-                });
-            }
-
-            document.getElementById('step-1').style.display = 'none';
-            document.getElementById('step-2').style.display = 'flex';
-
-            let progress = 0;
-            const progressBar = document.getElementById('p-bar');
-            const interval = setInterval(() => {
-                progress += 2;
-                progressBar.style.width = progress + '%';
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    setTimeout(showMainInterface, 300);
+                function type() {
+                    if (index < text.length) {
+                        target.innerHTML += text.charAt(index) === '\n' ? '<br>' : text.charAt(index);
+                        index++;
+                        setTimeout(type, 35);
+                    }
                 }
-            }, 30);
-        });
-
-        function showMainInterface() {
-            document.getElementById('step-2').style.display = 'none';
-            document.getElementById('step-3').style.display = 'block';
-
-            setTimeout(createFlowerShower, 300);
-            typeWriterMessage();
-        }
-
-        function createFlowerShower() {
-            const count = 35;
-            const petalColors = ['#ff80ab', '#ff4081', '#f48fb1', '#e91e63'];
-
-            for (let i = 0; i < count; i++) {
-                setTimeout(() => {
-                    const petal = document.createElement('div');
-                    petal.className = 'svg-petal';
-                    const size = Math.random() * 12 + 16;
-                    const color = petalColors[Math.floor(Math.random() * petalColors.length)];
-
-                    petal.innerHTML = `
-                        <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}">
-                            <path d="M12 2C9 7 4 9 4 14c0 4.4 3.6 8 8 8s8-3.6 8-8c0-5-5-7-8-12z"/>
-                        </svg>
-                    `;
-
-                    petal.style.left = (Math.random() * 100) + 'vw';
-                    petal.style.top = '-10vh';
-                    petal.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's';
-
-                    document.body.appendChild(petal);
-                    setTimeout(() => petal.remove(), 4500);
-                }, i * 90);
+                type();
             }
-        }
-
-        function typeWriterMessage() {
-            const text = "I have shut down my main accounts and cut out every unnecessary distraction.\n\nYour dedication, loyalty, and actions showed me what really matters. My energy and focus belong completely to our future now.\n\nNo distractions. Just us.";
-            let index = 0;
-            const target = document.getElementById('typed-text');
-
-            function type() {
-            
+        });
+    </script>
+</body>
+</html>

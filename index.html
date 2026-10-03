@@ -20,12 +20,11 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            perspective: 1200px;
             position: relative;
             background: #ffebee;
         }
 
-        /* ----- Masterpiece Canvas Background ----- */
+        /* ----- Background Canvas ----- */
         #art-canvas {
             position: fixed;
             top: 0;
@@ -35,7 +34,7 @@
             z-index: 1;
         }
 
-        /* ----- Bright Outer Pink Glow Frame ----- */
+        /* ----- Outer Glow Frame ----- */
         .screen-glow {
             position: fixed;
             top: 0;
@@ -136,8 +135,7 @@
             border: 2px solid #ff80ab;
             box-shadow: 0 0 35px #ff80ab, 0 0 70px rgba(255, 64, 129, 0.3);
             position: relative;
-            animation: tilt3D 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards,
-                       boxSingleGlow 2.5s infinite alternate ease-in-out 2.2s;
+            animation: boxSingleGlow 2.5s infinite alternate ease-in-out;
         }
 
         @keyframes boxSingleGlow {
@@ -149,12 +147,6 @@
                 border-color: rgba(255, 128, 171, 1);
                 box-shadow: 0 0 40px #ff80ab, 0 0 80px rgba(255, 64, 129, 0.6);
             }
-        }
-
-        @keyframes tilt3D {
-            0% { transform: rotateY(-25deg) rotateX(12deg) scale(0.85); }
-            50% { transform: rotateY(12deg) rotateX(-8deg) scale(1.03); }
-            100% { transform: rotateY(0deg) rotateX(0deg) scale(1); }
         }
 
         .card-header {
@@ -240,10 +232,10 @@
     <!-- Step 3 -->
     <div id="step-3">
         <div class="card-tilt">
-            <div class="card-header">A NEW CHAPTER 🇻🇳 ❤️</div>
+            <div class="card-header">A NEW CHAPTER 🇻🇳 ❤️️</div>
             <div class="message-content" id="typed-text"></div>
             <div class="action-area">
-                <a href="https://zalo.me" class="zalo-btn">Connect on Zalo</a>
+                <a href="https://zalo.me" class="zalo-btn" target="_blank">Connect on Zalo</a>
             </div>
         </div>
     </div>
@@ -252,17 +244,18 @@
         const canvas = document.getElementById('art-canvas');
         const ctx = canvas.getContext('2d');
 
-        function resize() {
+        let grassBlades = [];
+
+        function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             generateGrassBlades();
         }
 
-        // Generate Micro Grass Blade Details
-        let grassBlades = [];
+        // Generate Micro Grass Blades
         function generateGrassBlades() {
             grassBlades = [];
-            const count = Math.floor(canvas.width * 1.2); // Saturated Micro Blades
+            const count = Math.floor(canvas.width * 1.2);
             const grassStartY = canvas.height * 0.65;
             
             for (let i = 0; i < count; i++) {
@@ -272,7 +265,6 @@
                 const curve = (Math.random() - 0.5) * 15;
                 const shade = Math.random();
                 
-                // Color Palette for Grass Details
                 let color;
                 if (shade < 0.33) color = '#7ec850';
                 else if (shade < 0.66) color = '#5ba829';
@@ -282,23 +274,23 @@
             }
         }
 
-        window.addEventListener('resize', resize);
-        resize();
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
         // Butterfly Entity
         const butterfly = {
-            x: canvas.width * 0.5,
-            y: canvas.height * 0.7,
-            targetX: canvas.width * 0.5,
-            targetY: canvas.height * 0.7,
+            x: window.innerWidth * 0.5,
+            y: window.innerHeight * 0.7,
+            targetX: window.innerWidth * 0.5,
+            targetY: window.innerHeight * 0.7,
             angle: 0
         };
 
         // Black Cat
         const catBlack = {
-            x: canvas.width * 0.3,
-            y: canvas.height * 0.8,
-            targetX: canvas.width * 0.3,
+            x: window.innerWidth * 0.3,
+            y: window.innerHeight * 0.8,
+            targetX: window.innerWidth * 0.3,
             jumpHeight: 0,
             isJumping: false,
             color: '#1a1a1a',
@@ -307,9 +299,9 @@
 
         // Golden-Brown Cat
         const catGolden = {
-            x: canvas.width * 0.4,
-            y: canvas.height * 0.83,
-            targetX: canvas.width * 0.4,
+            x: window.innerWidth * 0.4,
+            y: window.innerHeight * 0.83,
+            targetX: window.innerWidth * 0.4,
             jumpHeight: 0,
             isJumping: false,
             color: '#d48817',
@@ -317,97 +309,13 @@
             eyeColor: '#4caf50'
         };
 
-        // Sun & Atmospheric Particles
+        // Sun Sparkles
         const sparkles = Array.from({ length: 45 }, () => ({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
             r: Math.random() * 2.5 + 1,
-            speedY: -Math.random() * 0.6 - 0.2,
-            opacity: Math.random()
+            speedY: -Math.random() * 0.6 - 0.2
         }));
-
-        function renderMasterpieceArt() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const time = Date.now() * 0.0025;
-
-            // 1. High Dynamic Bright Sky Gradient
-            const skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.75);
-            skyGrad.addColorStop(0, '#ff9a9e');
-            skyGrad.addColorStop(0.35, '#fecfef');
-            skyGrad.addColorStop(0.7, '#a1c4fd');
-            skyGrad.addColorStop(1, '#c2e9fb');
-            ctx.fillStyle = skyGrad;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Sunlight Bloom
-            const sunGrad = ctx.createRadialGradient(canvas.width * 0.8, canvas.height * 0.25, 10, canvas.width * 0.8, canvas.height * 0.25, 280);
-            sunGrad.addColorStop(0, 'rgba(255, 255, 220, 0.8)');
-            sunGrad.addColorStop(0.4, 'rgba(255, 224, 178, 0.35)');
-            sunGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-            ctx.fillStyle = sunGrad;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // 2. Volumetric Textured Cloud Layers
-            drawCloud(canvas.width * 0.2, canvas.height * 0.22, 90, 'rgba(255, 255, 255, 0.6)');
-            drawCloud(canvas.width * 0.65, canvas.height * 0.18, 110, 'rgba(255, 255, 255, 0.5)');
-
-            // 3. Ground Base Shadow & Base Gradient
-            const groundBaseY = canvas.height * 0.65;
-            const groundGrad = ctx.createLinearGradient(0, groundBaseY, 0, canvas.height);
-            groundGrad.addColorStop(0, '#9cd84e');
-            groundGrad.addColorStop(0.4, '#5ba829');
-            groundGrad.addColorStop(1, '#2d5c0e');
-            ctx.fillStyle = groundGrad;
-            ctx.fillRect(0, groundBaseY, canvas.width, canvas.height - groundBaseY);
-
-            // 4. Render Micro Grass Blades (High Detail)
-            ctx.lineWidth = 1.8;
-            for (let i = 0; i < grassBlades.length; i++) {
-                const b = grassBlades[i];
-                const sway = Math.sin(time * 2 + b.windOffset) * 4;
-                ctx.strokeStyle = b.color;
-                ctx.beginPath();
-                ctx.moveTo(b.x, b.y);
-                ctx.quadraticCurveTo(b.x + b.curve, b.y - b.height * 0.5, b.x + b.curve + sway, b.y - b.height);
-                ctx.stroke();
-            }
-
-            // 5. Update Butterfly
-            butterfly.angle += 0.12;
-            if (Math.random() < 0.02) {
-                butterfly.targetX = Math.random() * (canvas.width * 0.7) + canvas.width * 0.15;
-                butterfly.targetY = canvas.height * 0.64 + Math.random() * (canvas.height * 0.2);
-            }
-            butterfly.x += (butterfly.targetX - butterfly.x) * 0.035;
-            butterfly.y += (butterfly.targetY - butterfly.y) * 0.035 + Math.sin(butterfly.angle) * 1.8;
-
-            // Render Butterfly
-            ctx.fillStyle = '#e91e63';
-            const wingWidth = Math.abs(Math.sin(butterfly.angle * 2.5)) * 10 + 4;
-            ctx.beginPath();
-            ctx.ellipse(butterfly.x - 4, butterfly.y, wingWidth, 7, 0.3, 0, Math.PI * 2);
-            ctx.ellipse(butterfly.x + 4, butterfly.y, wingWidth, 7, -0.3, 0, Math.PI * 2);
-            ctx.fill();
-
-            // 6. Cats Logic & Rendering
-            updateCat(catBlack, butterfly.x - 45, time, 0);
-            updateCat(catGolden, butterfly.x + 25, time, 1);
-
-            drawCat(catBlack, time);
-            drawGoldenCat(catGolden, time);
-
-            // 7. Atmospheric Sun Gold Sparkles
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-            sparkles.forEach(s => {
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                ctx.fill();
-                s.y += s.speedY;
-                if (s.y < 0) s.y = canvas.height;
-            });
-
-            requestAnimationFrame(renderMasterpieceArt);
-        }
 
         function drawCloud(cx, cy, radius, fillStyle) {
             ctx.fillStyle = fillStyle;
@@ -438,7 +346,7 @@
         }
 
         // Draw Black Cat
-        function drawCat(c, time) {
+        function drawBlackCat(c, time) {
             const renderY = c.y - c.jumpHeight;
             ctx.save();
             ctx.translate(c.x, renderY);
@@ -497,7 +405,7 @@
             ctx.ellipse(0, 0, 18, 14, 0, 0, Math.PI * 2);
             ctx.fill();
 
-            // Dark Brown Patches Detail
+            // Dark Brown Patch
             ctx.fillStyle = c.patchColor;
             ctx.beginPath();
             ctx.ellipse(-3, -3, 9, 7, 0.2, 0, Math.PI * 2);
@@ -529,16 +437,101 @@
             ctx.restore();
         }
 
-        renderMasterpieceArt();
+        function renderArt() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const time = Date.now() * 0.0025;
+
+            // 1. Sky Gradient
+            const skyGrad = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.75);
+            skyGrad.addColorStop(0, '#ff9a9e');
+            skyGrad.addColorStop(0.35, '#fecfef');
+            skyGrad.addColorStop(0.7, '#a1c4fd');
+            skyGrad.addColorStop(1, '#c2e9fb');
+            ctx.fillStyle = skyGrad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Sunlight Bloom
+            const sunGrad = ctx.createRadialGradient(canvas.width * 0.8, canvas.height * 0.25, 10, canvas.width * 0.8, canvas.height * 0.25, 280);
+            sunGrad.addColorStop(0, 'rgba(255, 255, 220, 0.8)');
+            sunGrad.addColorStop(0.4, 'rgba(255, 224, 178, 0.35)');
+            sunGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.fillStyle = sunGrad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 2. Cloud Layers
+            drawCloud(canvas.width * 0.2, canvas.height * 0.22, 90, 'rgba(255, 255, 255, 0.6)');
+            drawCloud(canvas.width * 0.65, canvas.height * 0.18, 110, 'rgba(255, 255, 255, 0.5)');
+
+            // 3. Ground Base Gradient
+            const groundBaseY = canvas.height * 0.65;
+            const groundGrad = ctx.createLinearGradient(0, groundBaseY, 0, canvas.height);
+            groundGrad.addColorStop(0, '#9cd84e');
+            groundGrad.addColorStop(0.4, '#5ba829');
+            groundGrad.addColorStop(1, '#2d5c0e');
+            ctx.fillStyle = groundGrad;
+            ctx.fillRect(0, groundBaseY, canvas.width, canvas.height - groundBaseY);
+
+            // 4. Render Micro Grass Blades
+            ctx.lineWidth = 1.8;
+            for (let i = 0; i < grassBlades.length; i++) {
+                const b = grassBlades[i];
+                const sway = Math.sin(time * 2 + b.windOffset) * 4;
+                ctx.strokeStyle = b.color;
+                ctx.beginPath();
+                ctx.moveTo(b.x, b.y);
+                ctx.quadraticCurveTo(b.x + b.curve, b.y - b.height * 0.5, b.x + b.curve + sway, b.y - b.height);
+                ctx.stroke();
+            }
+
+            // 5. Update Butterfly
+            butterfly.angle += 0.12;
+            if (Math.random() < 0.02) {
+                butterfly.targetX = Math.random() * (canvas.width * 0.7) + canvas.width * 0.15;
+                butterfly.targetY = canvas.height * 0.64 + Math.random() * (canvas.height * 0.2);
+            }
+            butterfly.x += (butterfly.targetX - butterfly.x) * 0.035;
+            butterfly.y += (butterfly.targetY - butterfly.y) * 0.035 + Math.sin(butterfly.angle) * 1.8;
+
+            // Render Butterfly
+            ctx.fillStyle = '#e91e63';
+            const wingWidth = Math.abs(Math.sin(butterfly.angle * 2.5)) * 10 + 4;
+            ctx.beginPath();
+            ctx.ellipse(butterfly.x - 4, butterfly.y, wingWidth, 7, 0.3, 0, Math.PI * 2);
+            ctx.ellipse(butterfly.x + 4, butterfly.y, wingWidth, 7, -0.3, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 6. Cats Logic & Rendering
+            updateCat(catBlack, butterfly.x - 45, time, 0);
+            updateCat(catGolden, butterfly.x + 25, time, 1);
+
+            drawBlackCat(catBlack, time);
+            drawGoldenCat(catGolden, time);
+
+            // 7. Sparkles
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            sparkles.forEach(s => {
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fill();
+                s.y += s.speedY;
+                if (s.y < 0) s.y = canvas.height;
+            });
+
+            requestAnimationFrame(renderArt);
+        }
+
+        renderArt();
 
         /* ----- UI Interactivity ----- */
         document.getElementById('open-btn').addEventListener('click', function() {
-            confetti({
-                particleCount: 90,
-                spread: 110,
-                origin: { y: 0.6 },
-                colors: ['#da251d', '#ff1744', '#ffc107', '#ff4081']
-            });
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 90,
+                    spread: 110,
+                    origin: { y: 0.6 },
+                    colors: ['#da251d', '#ff1744', '#ffc107', '#ff4081']
+                });
+            }
 
             document.getElementById('step-1').style.display = 'none';
             document.getElementById('step-2').style.display = 'flex';
@@ -586,4 +579,14 @@
 
                     document.body.appendChild(petal);
                     setTimeout(() => petal.remove(), 4500);
-                }, i * 90
+                }, i * 90);
+            }
+        }
+
+        function typeWriterMessage() {
+            const text = "I have shut down my main accounts and cut out every unnecessary distraction.\n\nYour dedication, loyalty, and actions showed me what really matters. My energy and focus belong completely to our future now.\n\nNo distractions. Just us.";
+            let index = 0;
+            const target = document.getElementById('typed-text');
+
+            function type() {
+            

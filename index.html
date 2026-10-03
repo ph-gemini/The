@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Open Phyy Letter</title>
-    <!-- Canvas Confetti Library for Pure Red Paper Burst -->
+    <!-- Canvas Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         * {
@@ -15,9 +15,6 @@
         }
 
         body {
-            /* Rich Romantic Depth Background */
-            background: radial-gradient(circle at 50% 30%, #4a1228 0%, #290a17 60%, #15030b 100%);
-            color: #fff0f5;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -27,63 +24,39 @@
             position: relative;
         }
 
-        /* 1. Screen Outer Edge Glow (ဖုန်း/စခရင် ဘောင် အနားလင်းလက်မှု) */
-        body::before {
-            content: '';
+        /* ----- Anime Canvas Background ----- */
+        #anime-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        /* ----- Screen Outer Border Single Pink Glow (ဖုန်း/စခရင် ဘောင်အနား လင်းလက်မှု) ----- */
+        .screen-glow {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            border: 3px solid rgba(255, 105, 180, 0.4);
-            box-shadow: inset 0 0 35px rgba(255, 64, 129, 0.6),
-                        inset 0 0 70px rgba(216, 27, 96, 0.4);
+            border: 4px solid #ff80ab;
+            box-shadow: inset 0 0 25px #ff80ab, inset 0 0 50px #ff4081;
             pointer-events: none;
             z-index: 20;
-            animation: screenGlowPulse 3s infinite alternate ease-in-out;
+            animation: singlePinkBreathe 2.5s infinite alternate ease-in-out;
         }
 
-        @keyframes screenGlowPulse {
+        @keyframes singlePinkBreathe {
             0% {
-                box-shadow: inset 0 0 25px rgba(255, 64, 129, 0.4),
-                            inset 0 0 50px rgba(216, 27, 96, 0.2);
-                border-color: rgba(255, 105, 180, 0.3);
+                border-color: rgba(255, 128, 171, 0.5);
+                box-shadow: inset 0 0 15px #ff80ab, inset 0 0 30px #ff4081;
             }
             100% {
-                box-shadow: inset 0 0 45px rgba(255, 64, 129, 0.8),
-                            inset 0 0 90px rgba(255, 182, 193, 0.5);
-                border-color: rgba(255, 182, 193, 0.8);
+                border-color: rgba(255, 128, 171, 1);
+                box-shadow: inset 0 0 35px #ff80ab, inset 0 0 70px #ff4081;
             }
-        }
-
-        /* Ambient Background Floating Orbs */
-        .bg-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.5;
-            pointer-events: none;
-            animation: floatOrb 8s infinite alternate ease-in-out;
-        }
-        .orb-1 {
-            width: 300px;
-            height: 300px;
-            background: #ff4081;
-            top: 10%;
-            left: 15%;
-        }
-        .orb-2 {
-            width: 350px;
-            height: 350px;
-            background: #880e4f;
-            bottom: 10%;
-            right: 15%;
-            animation-delay: -4s;
-        }
-
-        @keyframes floatOrb {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, -40px) scale(1.15); }
         }
 
         /* ----- Step 1: Open Button ----- */
@@ -93,7 +66,7 @@
         }
 
         .letter-btn {
-            background: linear-gradient(135deg, #ff4081, #d81b60);
+            background: linear-gradient(135deg, #ff4081, #e91e63);
             color: #ffffff;
             border: none;
             padding: 20px 45px;
@@ -101,16 +74,13 @@
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 0 25px rgba(255, 64, 129, 0.6),
-                        0 0 50px rgba(216, 27, 96, 0.4);
+            box-shadow: 0 0 25px #ff80ab;
             transition: transform 0.3s, box-shadow 0.3s;
-            position: relative;
         }
 
         .letter-btn:hover {
             transform: scale(1.08);
-            box-shadow: 0 0 35px rgba(255, 64, 129, 0.9),
-                        0 0 70px rgba(255, 182, 193, 0.7);
+            box-shadow: 0 0 40px #ff4081;
         }
 
         /* ----- Step 2: Loading Bar ----- */
@@ -125,24 +95,24 @@
         .heart-icon {
             font-size: 48px;
             color: #ff4081;
-            text-shadow: 0 0 20px #ff4081;
+            text-shadow: 0 0 20px #ff80ab;
             animation: pulse 0.8s infinite alternate;
         }
 
         .progress-bar-container {
             width: 260px;
             height: 16px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.5);
             border-radius: 10px;
             overflow: hidden;
-            border: 1px solid rgba(255, 105, 180, 0.4);
-            box-shadow: 0 0 15px rgba(255, 64, 129, 0.3);
+            border: 1px solid #ff80ab;
+            box-shadow: 0 0 15px #ff80ab;
         }
 
         .progress-bar {
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, #ff4081, #ff80ab, #ffeb3b);
+            background: #ff4081;
             border-radius: 10px;
             transition: width 0.05s linear;
             box-shadow: 0 0 12px #ff4081;
@@ -157,33 +127,27 @@
             position: relative;
         }
 
-        /* 2. Textbox Edge Neon Glow (Letter Box ဘောင် လင်းလက်မှု) */
+        /* Elegant Glass Card with Single Pink Glow Border */
         .card-tilt {
-            background: rgba(35, 12, 22, 0.75);
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(15px);
             padding: 40px;
             border-radius: 24px;
-            border: 1.5px solid rgba(255, 128, 171, 0.5);
-            box-shadow: 0 0 30px rgba(255, 64, 129, 0.35),
-                        0 0 60px rgba(216, 27, 96, 0.25),
-                        inset 0 0 20px rgba(255, 105, 180, 0.15);
+            border: 2px solid #ff80ab;
+            box-shadow: 0 0 30px #ff80ab, 0 0 60px rgba(255, 64, 129, 0.4);
             position: relative;
-            overflow: hidden;
             animation: tilt3D 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards,
-                       boxGlowPulse 3s infinite alternate ease-in-out 2.2s;
+                       boxSingleGlow 2.5s infinite alternate ease-in-out 2.2s;
         }
 
-        @keyframes boxGlowPulse {
+        @keyframes boxSingleGlow {
             0% {
-                border-color: rgba(255, 128, 171, 0.4);
-                box-shadow: 0 0 25px rgba(255, 64, 129, 0.3),
-                            0 0 50px rgba(216, 27, 96, 0.2);
+                border-color: rgba(255, 128, 171, 0.6);
+                box-shadow: 0 0 20px #ff80ab, 0 0 40px rgba(255, 64, 129, 0.3);
             }
             100% {
-                border-color: rgba(255, 182, 193, 0.9);
-                box-shadow: 0 0 40px rgba(255, 64, 129, 0.6),
-                            0 0 80px rgba(255, 105, 180, 0.4),
-                            inset 0 0 25px rgba(255, 105, 180, 0.3);
+                border-color: rgba(255, 128, 171, 1);
+                box-shadow: 0 0 40px #ff80ab, 0 0 80px rgba(255, 64, 129, 0.6);
             }
         }
 
@@ -199,59 +163,23 @@
             }
         }
 
-        /* Diagonal Sweeping Glow Effect */
-        .card-tilt::after {
-            content: '';
-            position: absolute;
-            top: -100%;
-            left: -100%;
-            width: 300%;
-            height: 300%;
-            background: linear-gradient(
-                135deg,
-                transparent 42%,
-                rgba(255, 255, 255, 0.9) 48%,
-                rgba(255, 64, 129, 0.8) 50%,
-                rgba(255, 215, 0, 0.7) 52%,
-                transparent 58%
-            );
-            pointer-events: none;
-            animation: diagonalGlowSweep 2s ease-in-out 0.3s forwards;
-        }
-
-        @keyframes diagonalGlowSweep {
-            0% {
-                transform: translate(-50%, -50%);
-                opacity: 0;
-            }
-            30% {
-                opacity: 1;
-            }
-            100% {
-                transform: translate(50%, 50%);
-                opacity: 0;
-            }
-        }
-
         .card-header {
-            color: #ff80ab;
+            color: #da251d;
             font-size: 26px;
             font-weight: bold;
             margin-bottom: 22px;
             text-align: center;
             letter-spacing: 1.2px;
-            text-shadow: 0 0 12px rgba(255, 128, 171, 0.6);
         }
 
         .message-content {
             font-size: 16px;
             line-height: 1.9;
-            color: #fff0f5;
+            color: #4a148c;
             white-space: pre-line;
             margin-bottom: 30px;
             min-height: 130px;
-            font-weight: 400;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+            font-weight: 600;
         }
 
         .action-area {
@@ -270,37 +198,31 @@
             text-decoration: none;
             display: inline-block;
             box-shadow: 0 0 20px rgba(0, 104, 255, 0.5);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
         }
 
         .zalo-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(0, 104, 255, 0.8);
         }
 
-        /* SVG Code-Based Flower Petals */
+        /* SVG Vector Petals */
         .svg-petal {
             position: fixed;
             z-index: 5;
             pointer-events: none;
-            animation: diagonalRain linear forwards;
-            filter: drop-shadow(0 0 6px rgba(255, 105, 180, 0.6));
+            animation: verticalRain linear forwards;
         }
 
-        @keyframes diagonalRain {
+        @keyframes verticalRain {
             0% {
                 opacity: 0;
-                transform: translate(0, 0) rotate(0deg);
+                transform: translateY(0) rotate(0deg);
             }
-            15% {
-                opacity: 0.95;
-            }
-            85% {
-                opacity: 0.95;
-            }
+            15% { opacity: 0.9; }
+            85% { opacity: 0.9; }
             100% {
                 opacity: 0;
-                transform: translate(320px, 115vh) rotate(420deg);
+                transform: translateY(115vh) rotate(360deg);
             }
         }
 
@@ -312,9 +234,11 @@
 </head>
 <body>
 
-    <!-- Background Glowing Orbs -->
-    <div class="bg-orb orb-1"></div>
-    <div class="bg-orb orb-2"></div>
+    <!-- Anime Canvas Background -->
+    <canvas id="anime-bg"></canvas>
+
+    <!-- Screen Outer Edge Single Glow -->
+    <div class="screen-glow"></div>
 
     <!-- 1. Open Button -->
     <div id="step-1">
@@ -329,7 +253,7 @@
         <div class="progress-bar-container">
             <div class="progress-bar" id="p-bar"></div>
         </div>
-        <div style="font-size: 14px; color: #ff80ab; font-weight: 600;">Opening your private letter...</div>
+        <div style="font-size: 14px; color: #880e4f; font-weight: 700;">Opening your private letter...</div>
     </div>
 
     <!-- 3. Final Interface -->
@@ -346,6 +270,79 @@
     </div>
 
     <script>
+        /* ----- Pure Code Anime Grassland & Sky Animation ----- */
+        const canvas = document.getElementById('anime-bg');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Floating Dandelion Particles
+        const particles = Array.from({ length: 40 }, () => ({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            r: Math.random() * 3 + 1,
+            dx: Math.random() * 1 + 0.5,
+            dy: Math.random() * -0.8 - 0.2
+        }));
+
+        function drawAnimeBackground() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Anime Sunset Sky Gradient
+            const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.75);
+            skyGradient.addColorStop(0, '#ff9a9e');
+            skyGradient.addColorStop(0.5, '#fecfef');
+            skyGradient.addColorStop(1, '#a1c4fd');
+            ctx.fillStyle = skyGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 2. Anime Grassland Waves (Green Horizon)
+            const time = Date.now() * 0.002;
+            
+            // Back Hill
+            ctx.fillStyle = '#a8e6cf';
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height);
+            for (let x = 0; x <= canvas.width; x += 10) {
+                ctx.lineTo(x, canvas.height * 0.68 + Math.sin(x * 0.005 + time) * 15);
+            }
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.fill();
+
+            // Front Hill
+            ctx.fillStyle = '#56ab2f';
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height);
+            for (let x = 0; x <= canvas.width; x += 10) {
+                ctx.lineTo(x, canvas.height * 0.78 + Math.cos(x * 0.008 + time * 1.2) * 20);
+            }
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.fill();
+
+            // 3. Floating Light Particles
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fill();
+
+                p.x += p.dx;
+                p.y += p.dy;
+
+                if (p.y < 0) p.y = canvas.height;
+                if (p.x > canvas.width) p.x = 0;
+            });
+
+            requestAnimationFrame(drawAnimeBackground);
+        }
+        drawAnimeBackground();
+
+        /* ----- Button Click Logic & Animations ----- */
         document.getElementById('open-btn').addEventListener('click', function(e) {
             // First Code Red Paper Confetti Explosion
             confetti({
@@ -375,23 +372,22 @@
             document.getElementById('step-3').style.display = 'block';
 
             // SVG Petals Shower
-            setTimeout(createDiagonalFlowerShower, 300);
+            setTimeout(createFlowerShower, 300);
 
             // Message Typewriter
             typeWriterMessage();
         }
 
-        // Code-Drawn SVG Petal Generator with Glowing Effect
-        function createDiagonalFlowerShower() {
-            const count = 45;
-            const petalColors = ['#ff80ab', '#ff4081', '#f48fb1', '#ff1744'];
+        function createFlowerShower() {
+            const count = 35;
+            const petalColors = ['#ff80ab', '#ff4081', '#f48fb1', '#e91e63'];
 
             for (let i = 0; i < count; i++) {
                 setTimeout(() => {
                     const petal = document.createElement('div');
                     petal.className = 'svg-petal';
 
-                    const size = Math.random() * 14 + 16;
+                    const size = Math.random() * 12 + 16;
                     const color = petalColors[Math.floor(Math.random() * petalColors.length)];
 
                     petal.innerHTML = `
@@ -400,14 +396,14 @@
                         </svg>
                     `;
 
-                    petal.style.left = (Math.random() * 120 - 20) + 'vw';
+                    petal.style.left = (Math.random() * 100) + 'vw';
                     petal.style.top = '-10vh';
                     petal.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's';
 
                     document.body.appendChild(petal);
 
                     setTimeout(() => petal.remove(), 4500);
-                }, i * 80);
+                }, i * 90);
             }
         }
 

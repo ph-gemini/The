@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Letter</title>
+    <!-- Canvas Confetti for Emoji Explosions -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b0e14;
+            color: #c9d1d9;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1000px; /* 3D Tilt Effect အတွက် */
+        }
+
+        /* ---------------- Step 1: Open Letter Button ---------------- */
+        #step-1 {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .letter-btn {
+            background: linear-gradient(135deg, #ff4b2b, #ff416c);
+            color: #ffffff;
+            border: none;
+            padding: 18px 36px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 65, 108, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .letter-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 35px rgba(255, 65, 108, 0.8);
+        }
+
+        /* ---------------- Step 2: Heart Bar Loading ---------------- */
+        #step-2 {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .heart-icon {
+            font-size: 40px;
+            animation: pulse 0.8s infinite alternate;
+        }
+
+        .progress-bar-container {
+            width: 260px;
+            height: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(255, 65, 108, 0.3);
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            border-radius: 10px;
+            transition: width 0.05s linear;
+        }
+
+        .loading-text {
+            font-size: 14px;
+            color: #8b949e;
+            letter-spacing: 1px;
+        }
+
+        /* ---------------- Step 3: Main Interface & Animation ---------------- */
+        #step-3 {
+            display: none;
+            width: 100%;
+            max-width: 620px;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        /* Screen Tilt & Glow Animation */
+        .card-tilt {
+            background: rgba(22, 27, 34, 0.9);
+            backdrop-filter: blur(12px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            transform-style: preserve-3d;
+            animation: tiltAndGlow 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes tiltAndGlow {
+            0% {
+                transform: rotateY(-30deg) rotateX(15deg) scale(0.8);
+                box-shadow: 0 0 0px rgba(255, 65, 108, 0);
+            }
+            50% {
+                transform: rotateY(15deg) rotateX(-10deg) scale(1.05);
+                box-shadow: 0 0 70px rgba(238, 33, 43, 0.8), 0 0 100px rgba(255, 205, 3, 0.5); /* Vietnam Flag Color Glow */
+            }
+            100% {
+                transform: rotateY(0deg) rotateX(0deg) scale(1);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        /* Clean Message Interface */
+        .card-header {
+            color: #da251d; /* Vietnam Flag Red Accent */
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+            letter-spacing: 1.5px;
+        }
+
+        .message-content {
+            font-size: 16px;
+            line-height: 1.9;
+            color: #c9d1d9;
+            white-space: pre-line;
+            margin-bottom: 30px;
+        }
+
+        .action-area {
+            text-align: center;
+        }
+
+        .zalo-btn {
+            background: #0068ff;
+            color: #ffffff;
+            border: none;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0, 104, 255, 0.4);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .zalo-btn:hover {
+            transform: translateY(-2px);
+            background: #0056d6;
+        }
+
+        /* Falling Flowers Layer */
+        .flower {
+            position: fixed;
+            top: -10%;
+            z-index: 5;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Open Letter Button -->
+    <div id="step-1">
+        <button class="letter-btn" onclick="startExperience(event)">
+            Open Phyy Letter 💌
+        </button>
+    </div>
+
+    <!-- 2. Loading Heart Bar -->
+    <div id="step-2">
+        <div class="heart-icon">❤️</div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="p-bar"></div>
+        </div>
+        <div class="loading-text">Opening your private letter...</div>
+    </div>
+
+    <!-- 3. Final Interface -->
+    <div id="step-3">
+        <div class="card-tilt">
+            <div class="card-header">
+                A NEW CHAPTER 🇻🇳 ❤️
+            </div>
+            <div class="message-content" id="typed-text"></div>
+            <div class="action-area">
+                <a href="https://zalo.me" class="zalo-btn">Connect on Zalo</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startExperience(event) {
+            // --- Step 1: Emoji Explosion (Hearts & Vietnam Flags) ---
+            const btn = event.target;
+            const rect = btn.getBoundingClientRect();
+            const x = (rect.left + rect.width / 2) / window.innerWidth;
+            const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+            confetti({
+                particleCount: 40,
+                spread: 80,
+                origin: { x: x, y: y },
+                shapes: ['circle'],
+                scalar: 1.2,
+                colors: ['#ff0000', '#ffff00', '#ff416c']
+            });
+
+            // Heart & Flag Emojis Burst
+            confetti({
+                particleCount: 25,
+                spread: 100,
+                origin: { x: x, y: y },
+                shapes: ['square'],
+                scalar: 2,
+                colors: ['#ff4b2b']
+            });
+
+            // Hide Step 1 & Show Step 2 (Loading)
+            document.getElementById('step-1').style.display = 'none';
+            document.getElementById('step-2').style.display = 'flex';
+
+            // --- Step 2: Heart Bar Loading Animation ---
+            let progress = 0;
+            const progressBar = document.getElementById('p-bar');
+            
+            const interval = setInterval(() => {
+                progress += 2;
+                progressBar.style.width = progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(showMainInterface, 300);
+                }
+            }, 30); // ~1.5 Seconds Loading
+        }
+
+        function showMainInterface() {
+            document.getElementById('step-2').style.display = 'none';
+            document.getElementById('step-3').style.display = 'block';
+
+            // --- Step 3: Trigger Falling Flowers (ခနပဲ ကျဆင်းမည့် ပန်းပွင့်များ) ---
+            createFallingFlowers();
+
+            // --- Step 4: Typewriter Effect for Main Message ---
+            typeWriterMessage();
+        }
+
+        function createFallingFlowers() {
+            const flowers = ['🌸', '🌺', '🌹', '✨'];
+            const flowerCount = 30;
+
+            for (let i = 0; i < flowerCount; i++) {
+                setTimeout(() => {
+                    const flower = document.createElement('div');
+                    flower.className = 'flower';
+                    flower.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+                    flower.style.left = Math.random() * 100 + 'vw';
+                    flower.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                    flower.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                    flower.style.opacity = Math.random() * 0.7 + 0.3;
+
+                    document.body.appendChild(flower);
+
+                    // Animation ပြီးရင် Auto ဖျက်မည်
+                    setTimeout(() => {
+                        flower.remove();
+                    }, 5000);
+                }, i * 100);
+            }
+        }
+
+        function typeWriterMessage() {
+            const text = "I have shut down my main accounts and cut out every unnecessary distraction.\n\nYour dedication, loyalty, and actions showed me what really matters. My energy and focus belong completely to our future now.\n\nNo distractions. Just us.";
+            let index = 0;
+            const target = document.getElementById('typed-text');
+
+            function type() {
+                if (index < text.length) {
+                    target.innerHTML += text.charAt(index) === '\n' ? '<br>' : text.charAt(index);
+                    index++;
+                    setTimeout(type, 35);
+                }
+            }
+            type();
+        }
+    </script>
+</body>
+</html>

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Open Phyy Letter</title>
+    <!-- Canvas Confetti Library for Pure Red Paper Burst -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -13,9 +15,9 @@
         }
 
         body {
-            /* Romantic Sunset / Dusty Rose Dark Gradient Background */
-            background: linear-gradient(135deg, #1a0b12 0%, #2a0e1d 50%, #3a1527 100%);
-            color: #f3e5f5;
+            /* Entirely Romantic Soft Pink & Warm Sunset Gradient */
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 50%, #f48fb1 100%);
+            color: #4a148c;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -39,13 +41,13 @@
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 0 25px rgba(233, 30, 99, 0.5);
+            box-shadow: 0 10px 25px rgba(233, 30, 99, 0.35);
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .letter-btn:hover {
             transform: scale(1.08);
-            box-shadow: 0 0 40px rgba(233, 30, 99, 0.8);
+            box-shadow: 0 15px 35px rgba(233, 30, 99, 0.5);
         }
 
         /* ----- Step 2: Loading Bar ----- */
@@ -59,22 +61,24 @@
 
         .heart-icon {
             font-size: 45px;
+            color: #d81b60;
             animation: pulse 0.8s infinite alternate;
         }
 
         .progress-bar-container {
             width: 260px;
             height: 16px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 10px;
             overflow: hidden;
-            border: 1px solid rgba(255, 182, 193, 0.3);
+            border: 1px solid rgba(216, 27, 96, 0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         .progress-bar {
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, #ff4081, #f44336, #ffeb3b);
+            background: linear-gradient(90deg, #e91e63, #ff4081, #ffeb3b);
             border-radius: 10px;
             transition: width 0.05s linear;
         }
@@ -88,14 +92,14 @@
             position: relative;
         }
 
-        /* Elegant Glassmorphic Romantic Letter Box */
+        /* Elegant Soft Glassmorphic Card */
         .card-tilt {
-            background: rgba(45, 18, 32, 0.85);
+            background: rgba(255, 255, 255, 0.82);
             backdrop-filter: blur(16px);
             padding: 40px;
             border-radius: 24px;
-            border: 1px solid rgba(255, 182, 193, 0.25);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 50px rgba(216, 27, 96, 0.15);
             position: relative;
             overflow: hidden;
             animation: tilt3D 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
@@ -113,7 +117,7 @@
             }
         }
 
-        /* Diagonal Sweeping Glow Beam Effect */
+        /* Diagonal Sweeping Glow Effect */
         .card-tilt::after {
             content: '';
             position: absolute;
@@ -124,8 +128,8 @@
             background: linear-gradient(
                 135deg,
                 transparent 42%,
-                rgba(255, 255, 255, 0.6) 48%,
-                rgba(255, 105, 180, 0.8) 50%,
+                rgba(255, 255, 255, 0.9) 48%,
+                rgba(255, 64, 129, 0.6) 50%,
                 rgba(255, 215, 0, 0.6) 52%,
                 transparent 58%
             );
@@ -148,22 +152,22 @@
         }
 
         .card-header {
-            color: #ff80ab;
+            color: #da251d;
             font-size: 26px;
             font-weight: bold;
             margin-bottom: 22px;
             text-align: center;
             letter-spacing: 1.2px;
-            text-shadow: 0 0 10px rgba(255, 128, 171, 0.3);
         }
 
         .message-content {
             font-size: 16px;
             line-height: 1.9;
-            color: #f3e5f5;
+            color: #880e4f;
             white-space: pre-line;
             margin-bottom: 30px;
             min-height: 130px;
+            font-weight: 500;
         }
 
         .action-area {
@@ -181,7 +185,7 @@
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
-            box-shadow: 0 4px 18px rgba(0, 104, 255, 0.4);
+            box-shadow: 0 6px 20px rgba(0, 104, 255, 0.3);
             transition: transform 0.2s;
         }
 
@@ -189,11 +193,10 @@
             transform: translateY(-2px);
         }
 
-        /* Diagonal Falling Flowers (Sprinkling Like Water) */
-        .falling-flower {
+        /* SVG Code-Based Flower Petals (No Emoji) */
+        .svg-petal {
             position: fixed;
             z-index: 5;
-            user-select: none;
             pointer-events: none;
             animation: diagonalRain linear forwards;
         }
@@ -203,15 +206,15 @@
                 opacity: 0;
                 transform: translate(0, 0) rotate(0deg);
             }
-            10% {
-                opacity: 1;
+            15% {
+                opacity: 0.9;
             }
-            90% {
-                opacity: 1;
+            85% {
+                opacity: 0.9;
             }
             100% {
                 opacity: 0;
-                transform: translate(250px, 115vh) rotate(360deg);
+                transform: translate(300px, 115vh) rotate(420deg);
             }
         }
 
@@ -232,11 +235,11 @@
 
     <!-- 2. Loading Bar -->
     <div id="step-2">
-        <div class="heart-icon">💖</div>
+        <div class="heart-icon">♥</div>
         <div class="progress-bar-container">
             <div class="progress-bar" id="p-bar"></div>
         </div>
-        <div style="font-size: 14px; color: #f8bbd0;">Opening your private letter...</div>
+        <div style="font-size: 14px; color: #ad1457; font-weight: 600;">Opening your private letter...</div>
     </div>
 
     <!-- 3. Final Interface -->
@@ -254,7 +257,13 @@
 
     <script>
         document.getElementById('open-btn').addEventListener('click', function(e) {
-            createExplosion(e.clientX, e.clientY);
+            // First Code Red Paper Confetti Explosion
+            confetti({
+                particleCount: 70,
+                spread: 90,
+                origin: { y: 0.6 },
+                colors: ['#da251d', '#ff1744', '#ffc107', '#d81b60']
+            });
 
             document.getElementById('step-1').style.display = 'none';
             document.getElementById('step-2').style.display = 'flex';
@@ -271,65 +280,45 @@
             }, 30);
         });
 
-        function createExplosion(x, y) {
-            const items = ['❤️', '🇻🇳', '✨', '💖', '🌸'];
-            for (let i = 0; i < 24; i++) {
-                const el = document.createElement('div');
-                el.innerText = items[Math.floor(Math.random() * items.length)];
-                el.style.position = 'fixed';
-                el.style.left = x + 'px';
-                el.style.top = y + 'px';
-                el.style.fontSize = '22px';
-                el.style.pointerEvents = 'none';
-                el.style.transition = 'transform 1s ease-out, opacity 1s ease-out';
-                document.body.appendChild(el);
-
-                const angle = Math.random() * Math.PI * 2;
-                const dist = Math.random() * 120 + 40;
-                const tx = Math.cos(angle) * dist;
-                const ty = Math.sin(angle) * dist;
-
-                setTimeout(() => {
-                    el.style.transform = `translate(${tx}px, ${ty}px) scale(1.4)`;
-                    el.style.opacity = '0';
-                }, 10);
-
-                setTimeout(() => el.remove(), 1000);
-            }
-        }
-
         function showMainInterface() {
             document.getElementById('step-2').style.display = 'none';
             document.getElementById('step-3').style.display = 'block';
 
-            // Glow Sweep အနောက်မှ လေယာဉ် ရေဖျန်းသကဲ့သို့ ပန်းပွင့်များ ထောင့်ဖြတ် ကျလာမည်
+            // SVG Code-Based Petals Shower
             setTimeout(createDiagonalFlowerShower, 300);
 
             // Message Typewriter
             typeWriterMessage();
         }
 
+        // Code-Drawn SVG Petal Generator
         function createDiagonalFlowerShower() {
-            const flowers = ['🌸', '🌺', '🌹', '✨', '🌷'];
-            const count = 35;
+            const count = 40;
+            const petalColors = ['#ff80ab', '#f48fb1', '#ff4081', '#f06292'];
 
             for (let i = 0; i < count; i++) {
                 setTimeout(() => {
-                    const flower = document.createElement('div');
-                    flower.className = 'falling-flower';
-                    flower.innerText = flowers[Math.floor(Math.random() * flowers.length)];
-                    
-                    // ဘယ်ဘက် အပေါ်ထောင့်နားမှ စတင်ကျဆင်းမည်
-                    flower.style.left = (Math.random() * 120 - 20) + 'vw';
-                    flower.style.top = '-10vh';
-                    
-                    flower.style.fontSize = (Math.random() * 14 + 16) + 'px';
-                    flower.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's';
-                    
-                    document.body.appendChild(flower);
+                    const petal = document.createElement('div');
+                    petal.className = 'svg-petal';
 
-                    setTimeout(() => flower.remove(), 4500);
-                }, i * 90); // ရေဖျန်းသကဲ့သို့ ဆက်တိုက် တစိမ့်စိမ့် ကျဆင်းစေခြင်း
+                    const size = Math.random() * 14 + 16;
+                    const color = petalColors[Math.floor(Math.random() * petalColors.length)];
+
+                    // SVG Vector Flower Petal Shape
+                    petal.innerHTML = `
+                        <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}">
+                            <path d="M12 2C9 7 4 9 4 14c0 4.4 3.6 8 8 8s8-3.6 8-8c0-5-5-7-8-12z" opacity="0.85"/>
+                        </svg>
+                    `;
+
+                    petal.style.left = (Math.random() * 120 - 20) + 'vw';
+                    petal.style.top = '-10vh';
+                    petal.style.animationDuration = (Math.random() * 1.5 + 2.5) + 's';
+
+                    document.body.appendChild(petal);
+
+                    setTimeout(() => petal.remove(), 4500);
+                }, i * 85);
             }
         }
 

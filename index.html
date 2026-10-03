@@ -15,15 +15,75 @@
         }
 
         body {
-            /* Entirely Romantic Soft Pink & Warm Sunset Gradient */
-            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 50%, #f48fb1 100%);
-            color: #4a148c;
+            /* Rich Romantic Depth Background */
+            background: radial-gradient(circle at 50% 30%, #4a1228 0%, #290a17 60%, #15030b 100%);
+            color: #fff0f5;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
             perspective: 1200px;
+            position: relative;
+        }
+
+        /* 1. Screen Outer Edge Glow (ဖုန်း/စခရင် ဘောင် အနားလင်းလက်မှု) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 3px solid rgba(255, 105, 180, 0.4);
+            box-shadow: inset 0 0 35px rgba(255, 64, 129, 0.6),
+                        inset 0 0 70px rgba(216, 27, 96, 0.4);
+            pointer-events: none;
+            z-index: 20;
+            animation: screenGlowPulse 3s infinite alternate ease-in-out;
+        }
+
+        @keyframes screenGlowPulse {
+            0% {
+                box-shadow: inset 0 0 25px rgba(255, 64, 129, 0.4),
+                            inset 0 0 50px rgba(216, 27, 96, 0.2);
+                border-color: rgba(255, 105, 180, 0.3);
+            }
+            100% {
+                box-shadow: inset 0 0 45px rgba(255, 64, 129, 0.8),
+                            inset 0 0 90px rgba(255, 182, 193, 0.5);
+                border-color: rgba(255, 182, 193, 0.8);
+            }
+        }
+
+        /* Ambient Background Floating Orbs */
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.5;
+            pointer-events: none;
+            animation: floatOrb 8s infinite alternate ease-in-out;
+        }
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: #ff4081;
+            top: 10%;
+            left: 15%;
+        }
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: #880e4f;
+            bottom: 10%;
+            right: 15%;
+            animation-delay: -4s;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -40px) scale(1.15); }
         }
 
         /* ----- Step 1: Open Button ----- */
@@ -33,21 +93,24 @@
         }
 
         .letter-btn {
-            background: linear-gradient(135deg, #d81b60, #e91e63);
+            background: linear-gradient(135deg, #ff4081, #d81b60);
             color: #ffffff;
             border: none;
-            padding: 20px 42px;
+            padding: 20px 45px;
             font-size: 20px;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(233, 30, 99, 0.35);
+            box-shadow: 0 0 25px rgba(255, 64, 129, 0.6),
+                        0 0 50px rgba(216, 27, 96, 0.4);
             transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
         }
 
         .letter-btn:hover {
             transform: scale(1.08);
-            box-shadow: 0 15px 35px rgba(233, 30, 99, 0.5);
+            box-shadow: 0 0 35px rgba(255, 64, 129, 0.9),
+                        0 0 70px rgba(255, 182, 193, 0.7);
         }
 
         /* ----- Step 2: Loading Bar ----- */
@@ -60,27 +123,29 @@
         }
 
         .heart-icon {
-            font-size: 45px;
-            color: #d81b60;
+            font-size: 48px;
+            color: #ff4081;
+            text-shadow: 0 0 20px #ff4081;
             animation: pulse 0.8s infinite alternate;
         }
 
         .progress-bar-container {
             width: 260px;
             height: 16px;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             overflow: hidden;
-            border: 1px solid rgba(216, 27, 96, 0.3);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255, 105, 180, 0.4);
+            box-shadow: 0 0 15px rgba(255, 64, 129, 0.3);
         }
 
         .progress-bar {
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, #e91e63, #ff4081, #ffeb3b);
+            background: linear-gradient(90deg, #ff4081, #ff80ab, #ffeb3b);
             border-radius: 10px;
             transition: width 0.05s linear;
+            box-shadow: 0 0 12px #ff4081;
         }
 
         /* ----- Step 3: Main Interface ----- */
@@ -92,17 +157,34 @@
             position: relative;
         }
 
-        /* Elegant Soft Glassmorphic Card */
+        /* 2. Textbox Edge Neon Glow (Letter Box ဘောင် လင်းလက်မှု) */
         .card-tilt {
-            background: rgba(255, 255, 255, 0.82);
-            backdrop-filter: blur(16px);
+            background: rgba(35, 12, 22, 0.75);
+            backdrop-filter: blur(20px);
             padding: 40px;
             border-radius: 24px;
-            border: 1.5px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 20px 50px rgba(216, 27, 96, 0.15);
+            border: 1.5px solid rgba(255, 128, 171, 0.5);
+            box-shadow: 0 0 30px rgba(255, 64, 129, 0.35),
+                        0 0 60px rgba(216, 27, 96, 0.25),
+                        inset 0 0 20px rgba(255, 105, 180, 0.15);
             position: relative;
             overflow: hidden;
-            animation: tilt3D 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation: tilt3D 2.2s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+                       boxGlowPulse 3s infinite alternate ease-in-out 2.2s;
+        }
+
+        @keyframes boxGlowPulse {
+            0% {
+                border-color: rgba(255, 128, 171, 0.4);
+                box-shadow: 0 0 25px rgba(255, 64, 129, 0.3),
+                            0 0 50px rgba(216, 27, 96, 0.2);
+            }
+            100% {
+                border-color: rgba(255, 182, 193, 0.9);
+                box-shadow: 0 0 40px rgba(255, 64, 129, 0.6),
+                            0 0 80px rgba(255, 105, 180, 0.4),
+                            inset 0 0 25px rgba(255, 105, 180, 0.3);
+            }
         }
 
         @keyframes tilt3D {
@@ -129,8 +211,8 @@
                 135deg,
                 transparent 42%,
                 rgba(255, 255, 255, 0.9) 48%,
-                rgba(255, 64, 129, 0.6) 50%,
-                rgba(255, 215, 0, 0.6) 52%,
+                rgba(255, 64, 129, 0.8) 50%,
+                rgba(255, 215, 0, 0.7) 52%,
                 transparent 58%
             );
             pointer-events: none;
@@ -152,22 +234,24 @@
         }
 
         .card-header {
-            color: #da251d;
+            color: #ff80ab;
             font-size: 26px;
             font-weight: bold;
             margin-bottom: 22px;
             text-align: center;
             letter-spacing: 1.2px;
+            text-shadow: 0 0 12px rgba(255, 128, 171, 0.6);
         }
 
         .message-content {
             font-size: 16px;
             line-height: 1.9;
-            color: #880e4f;
+            color: #fff0f5;
             white-space: pre-line;
             margin-bottom: 30px;
             min-height: 130px;
-            font-weight: 500;
+            font-weight: 400;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
         }
 
         .action-area {
@@ -185,20 +269,22 @@
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
-            box-shadow: 0 6px 20px rgba(0, 104, 255, 0.3);
-            transition: transform 0.2s;
+            box-shadow: 0 0 20px rgba(0, 104, 255, 0.5);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .zalo-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 104, 255, 0.8);
         }
 
-        /* SVG Code-Based Flower Petals (No Emoji) */
+        /* SVG Code-Based Flower Petals */
         .svg-petal {
             position: fixed;
             z-index: 5;
             pointer-events: none;
             animation: diagonalRain linear forwards;
+            filter: drop-shadow(0 0 6px rgba(255, 105, 180, 0.6));
         }
 
         @keyframes diagonalRain {
@@ -207,14 +293,14 @@
                 transform: translate(0, 0) rotate(0deg);
             }
             15% {
-                opacity: 0.9;
+                opacity: 0.95;
             }
             85% {
-                opacity: 0.9;
+                opacity: 0.95;
             }
             100% {
                 opacity: 0;
-                transform: translate(300px, 115vh) rotate(420deg);
+                transform: translate(320px, 115vh) rotate(420deg);
             }
         }
 
@@ -225,6 +311,10 @@
     </style>
 </head>
 <body>
+
+    <!-- Background Glowing Orbs -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
 
     <!-- 1. Open Button -->
     <div id="step-1">
@@ -239,7 +329,7 @@
         <div class="progress-bar-container">
             <div class="progress-bar" id="p-bar"></div>
         </div>
-        <div style="font-size: 14px; color: #ad1457; font-weight: 600;">Opening your private letter...</div>
+        <div style="font-size: 14px; color: #ff80ab; font-weight: 600;">Opening your private letter...</div>
     </div>
 
     <!-- 3. Final Interface -->
@@ -259,10 +349,10 @@
         document.getElementById('open-btn').addEventListener('click', function(e) {
             // First Code Red Paper Confetti Explosion
             confetti({
-                particleCount: 70,
-                spread: 90,
+                particleCount: 80,
+                spread: 100,
                 origin: { y: 0.6 },
-                colors: ['#da251d', '#ff1744', '#ffc107', '#d81b60']
+                colors: ['#da251d', '#ff1744', '#ffc107', '#ff4081']
             });
 
             document.getElementById('step-1').style.display = 'none';
@@ -284,17 +374,17 @@
             document.getElementById('step-2').style.display = 'none';
             document.getElementById('step-3').style.display = 'block';
 
-            // SVG Code-Based Petals Shower
+            // SVG Petals Shower
             setTimeout(createDiagonalFlowerShower, 300);
 
             // Message Typewriter
             typeWriterMessage();
         }
 
-        // Code-Drawn SVG Petal Generator
+        // Code-Drawn SVG Petal Generator with Glowing Effect
         function createDiagonalFlowerShower() {
-            const count = 40;
-            const petalColors = ['#ff80ab', '#f48fb1', '#ff4081', '#f06292'];
+            const count = 45;
+            const petalColors = ['#ff80ab', '#ff4081', '#f48fb1', '#ff1744'];
 
             for (let i = 0; i < count; i++) {
                 setTimeout(() => {
@@ -304,10 +394,9 @@
                     const size = Math.random() * 14 + 16;
                     const color = petalColors[Math.floor(Math.random() * petalColors.length)];
 
-                    // SVG Vector Flower Petal Shape
                     petal.innerHTML = `
                         <svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}">
-                            <path d="M12 2C9 7 4 9 4 14c0 4.4 3.6 8 8 8s8-3.6 8-8c0-5-5-7-8-12z" opacity="0.85"/>
+                            <path d="M12 2C9 7 4 9 4 14c0 4.4 3.6 8 8 8s8-3.6 8-8c0-5-5-7-8-12z"/>
                         </svg>
                     `;
 
@@ -318,7 +407,7 @@
                     document.body.appendChild(petal);
 
                     setTimeout(() => petal.remove(), 4500);
-                }, i * 85);
+                }, i * 80);
             }
         }
 
